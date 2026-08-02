@@ -20,6 +20,10 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': 'warn',
       'prettier/prettier': 'error',
+      '@typescript-eslint/no-explicit-any': 'off', // 关闭显式 any 报错
+      '@typescript-eslint/no-unsafe-argument': 'off', // 关闭 any 作为参数报错
+      '@typescript-eslint/no-unsafe-assignment': 'off', // 关闭 any 赋值报错
+      '@typescript-eslint/no-unsafe-member-access': 'off', // 关闭 any 属性访问报错
     },
     languageOptions: {
       globals: globals.browser,
