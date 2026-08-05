@@ -1,0 +1,113 @@
+import { type FC } from 'react';
+import { type OptionType, type QuestionCheckboxProps } from '../types';
+import { Button, Checkbox, Form, Input, Space } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { nanoid } from 'nanoid';
+const PropComponent: FC<QuestionCheckboxProps> = (props: QuestionCheckboxProps) => {
+  const { title, isVertical, list, onChange, disabled } = props;
+  const [form] = Form.useForm();
+
+  const handleValueChange = () => {
+    if (onChange) onChange(form.getFieldsValue());
+
+    /*  const newValues = form.getFieldsValue() as QuestionCheckboxProps;
+    if (newValues.list) {
+      newValues.list = newValues.list.filter(item => item.text != null);
+    }
+
+    const { list = [] } = newValues;
+    list.forEach(item => {
+      if (item.value) return;
+      item.value = nanoid();
+    });
+
+    onChange(newValues); */
+  };
+
+  return (
+    <Form
+      form={form}
+      layout="vertical"
+      initialValues={{ title, isVertical, list }}
+      disabled={disabled}
+      onValuesChange={handleValueChange}
+    >
+      <Form.Item label="标题" name="title">
+        <Input />
+      </Form.Item>
+      <Form.Item label="选项">
+        <Form.List name="list">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map((item, index) => {
+                const { key, name } = item;
+                return (
+                  <Space key={key} align="baseline">
+                    <Form.Item name={[name, 'checked']} valuePropName="checked">
+                      <Checkbox />
+                    </Form.Item>
+                    <Form.Item
+                      name={[name, 'text']}
+                      rules={[
+                        { required: true, message: '请输入选项' },
+                        {
+                          validator: (_, text) => {
+                            const { list = [] } = form.getFieldsValue();
+                            let num = 0;
+                            list.forEach((option: OptionType) => {
+                              if (option.text === text) num++; //记录text个数
+                            });
+
+                            if (num === 1) return Promise.resolve();
+                            return Promise.reject(new Error('选项重复'));
+                          },
+                        },
+                      ]}
+                    >
+                      <Input placeholder="请输入选项" onChange={handleValueChange} />
+                    </Form.Item>
+                    <Form.Item name={[name, 'value']} hidden>
+                      <Input />
+                    </Form.Item>
+
+                    {index > 0 && (
+                      <MinusCircleOutlined
+                        onClick={() => {
+                          remove(name);
+                          setTimeout(() => {
+                            handleValueChange();
+                          }, 0);
+                        }}
+                      />
+                    )}
+                  </Space>
+                );
+              })}
+              <Form.Item>
+                <Button
+                  type="link"
+                  onClick={() => {
+                    const newValue = nanoid(5);
+                    add({ text: '', value: newValue });
+                    setTimeout(() => {
+                      handleValueChange();
+                    }, 0);
+                  }}
+                  icon={<PlusOutlined />}
+                  block
+                >
+                  添加选项
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      </Form.Item>
+      <Form.Item name="isVertical" valuePropName="checked">
+        <Checkbox>竖向排列</Checkbox>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default PropComponent;

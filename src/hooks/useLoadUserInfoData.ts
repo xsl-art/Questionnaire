@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useUserInfo from './useUserInfo';
 import { useRequest } from 'ahooks';
 import { getUserInfoService } from '@/api';
-import { setUserInfo } from '@/store/userReducer';
+import { setUserInfo } from '@/store/userStore/userReducer';
 import { useDispatch } from 'react-redux';
 export const useLoadUserData = () => {
   const dispatch = useDispatch();

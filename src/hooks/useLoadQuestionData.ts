@@ -1,23 +1,46 @@
 import { getQuestionService } from '@/api';
 import { useParams } from 'react-router-dom';
 import { useRequest } from 'ahooks';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { resetComponents } from '@/store/componentsStore/componentsReducer';
+import { resetPageInfo } from '@/store/pageInfoStore/pageInfoReducer';
 
 export const useLoadQuestionData = () => {
   const { id = '' } = useParams();
-  /*const [questionData, setQuestionData] = useState<ResDataType>({});
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const { loading, data, error, run } = useRequest(
+    async (id: string) => {
+      if (!id) return;
+      const data = await getQuestionService(id);
+      return data;
+    },
+    {
+      manual: true,
+    }
+  );
+
+  //保存
+  useEffect(() => {
+    if (!data) return;
+    const { title = '', desc = '', js = '', css = '', componentList = [] } = data;
+
+    //获取默认选中id
+    let selectedId = '';
+    if (componentList.length > 0) {
+      selectedId = componentList[0].fe_id;
+    }
+
+    //存储componentList到store
+    dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }));
+    //保存pageInfo到store
+    dispatch(resetPageInfo({ title, desc, js, css }));
+  }, [data]);
 
   useEffect(() => {
-    const data = getQuestionService(id);
-    setQuestionData(data);
-    setLoading(false);
-  }, [id]); */
-  const load = async () => {
-    const data = await getQuestionService(id);
-    return data;
-  };
+    run(id);
+  }, [id]);
 
-  const { loading, data, error } = useRequest(load);
-
-  return { data, loading, error };
+  return { loading, error };
 };

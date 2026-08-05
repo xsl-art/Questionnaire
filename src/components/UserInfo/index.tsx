@@ -4,7 +4,7 @@ import { UserInfoWrapper } from './style';
 import { Link, useNavigate } from 'react-router-dom';
 import useUserInfo from '@/hooks/useUserInfo';
 import { useDispatch } from 'react-redux';
-import { clearUserInfo } from '@/store/userReducer';
+import { clearUserInfo } from '@/store/userStore/userReducer';
 
 const UserInfo: FC = () => {
   const dispatch = useDispatch();
