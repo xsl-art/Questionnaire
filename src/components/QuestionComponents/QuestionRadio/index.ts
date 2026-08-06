@@ -4,6 +4,7 @@
 
 import Component from './Component';
 import PropComponent from './PropComponent';
+import StatComponent from './StatComponent';
 import { defaultQuestionRadioProps } from './types';
 import type { QuestionComponentConfig } from '../type';
 
@@ -14,6 +15,7 @@ const QuestionRadioConfig: QuestionComponentConfig = {
   type: 'questionRadio',
   Component,
   PropComponent,
+  StatComponent,
   defaultProps: defaultQuestionRadioProps,
 };
 

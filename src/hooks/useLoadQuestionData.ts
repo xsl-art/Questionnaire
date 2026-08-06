@@ -24,7 +24,14 @@ export const useLoadQuestionData = () => {
   //保存
   useEffect(() => {
     if (!data) return;
-    const { title = '', desc = '', js = '', css = '', componentList = [] } = data;
+    const {
+      title = '',
+      desc = '',
+      js = '',
+      css = '',
+      componentList = [],
+      isPublished = false,
+    } = data;
 
     //获取默认选中id
     let selectedId = '';
@@ -35,7 +42,7 @@ export const useLoadQuestionData = () => {
     //存储componentList到store
     dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }));
     //保存pageInfo到store
-    dispatch(resetPageInfo({ title, desc, js, css }));
+    dispatch(resetPageInfo({ title, desc, js, css, isPublished }));
   }, [data]);
 
   useEffect(() => {

@@ -5,6 +5,7 @@ export type PageInfoType = {
   desc?: string;
   js?: string;
   css?: string;
+  isPublished?: boolean;
 };
 
 const INIT_STATE: PageInfoType = {
@@ -12,6 +13,7 @@ const INIT_STATE: PageInfoType = {
   desc: '',
   js: '',
   css: '',
+  isPublished: false,
 };
 
 export const pageInfoSlice = createSlice({
@@ -19,7 +21,7 @@ export const pageInfoSlice = createSlice({
   initialState: INIT_STATE,
   reducers: {
     resetPageInfo: (state: PageInfoType, action: PayloadAction<PageInfoType>) => {
-      state = action.payload;
+      return action.payload;
     },
     //修改标题
     updateTitle: (state: PageInfoType, action: PayloadAction<string>) => {

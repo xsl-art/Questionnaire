@@ -3,8 +3,11 @@ import type { QuestionInputProps } from './QuestionInput/types';
 import type { QuestionParagraphProps } from './QuestionParagraph/types';
 import type { QuestionInfoProps } from './QuestionInfo/types';
 import type { QuestionTextareaProps } from './QuestionTextarea/types';
-import type { QuestionRadioProps } from './QuestionRadio/types';
-import type { QuestionCheckboxProps } from './QuestionCheckbox/types';
+import type { QuestionRadioProps, QuestionRadioStatisticsProps } from './QuestionRadio/types';
+import type {
+  QuestionCheckboxProps,
+  QuestionCheckboxStatisticsProps,
+} from './QuestionCheckbox/types';
 import questionInputConfig from './QuestionInput';
 import questionTitleConfig from './QuestionTitle';
 import QuestionParagraphConfig from './QuestionParagraph';
@@ -23,12 +26,16 @@ export type ComponentPropsType = QuestionTitleProps &
   QuestionRadioProps &
   QuestionCheckboxProps;
 
+//统一组件的prop type
+type ComponentStatisticsPropsType = QuestionRadioStatisticsProps & QuestionCheckboxStatisticsProps;
+
 //统一组件配置
 export interface QuestionComponentConfig<T = any> {
   title: string;
   type: string;
   Component: FC<T>;
   PropComponent: FC<T>; //属性组件
+  StatComponent?: FC<ComponentStatisticsPropsType>; //统计组件
   defaultProps: T;
 }
 

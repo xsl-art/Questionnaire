@@ -82,3 +82,23 @@ export const loginService = async (user: UserInfo): Promise<ResDataType> => {
   const data = (await httpInstance.post(url, body)) as ResDataType;
   return data;
 };
+
+//获取统计列表数据
+export const getStatisticsService = async (
+  questionId: string,
+  option: { page: number; pageSize: number }
+): Promise<ResDataType> => {
+  const url = `/api/stat/${questionId}`;
+  const data = (await httpInstance.get(url, { params: option })) as ResDataType;
+  return data;
+};
+
+//获取统计详情数据
+export const getStatisticsDetailService = async (
+  questionId: string,
+  componentId: string
+): Promise<ResDataType> => {
+  const url = `/api/stat/${questionId}/${componentId}`;
+  const data = (await httpInstance.get(url)) as ResDataType;
+  return data;
+};

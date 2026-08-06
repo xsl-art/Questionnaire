@@ -4,6 +4,7 @@
 
 import Component from './Component';
 import PropComponent from './PropComponent';
+import StatComponent from './StatComponent';
 import { defaultQuestionCheckboxProps } from './types';
 import type { QuestionComponentConfig } from '../type';
 
@@ -14,6 +15,7 @@ const QuestionCheckboxConfig: QuestionComponentConfig = {
   type: 'questionCheckbox',
   Component, //画布展示的组件
   PropComponent, //属性组件
+  StatComponent, //统计图表组件
   defaultProps: defaultQuestionCheckboxProps,
 };
 

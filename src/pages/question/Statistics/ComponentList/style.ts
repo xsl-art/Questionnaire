@@ -1,0 +1,27 @@
+import styled from 'styled-components';
+
+export const ListWrapper = styled.div`
+  min-height: 100%;
+  overflow-y: auto;
+  background-color: #fff;
+
+  .component-wrapper {
+    margin: 12px;
+    border: 1px solid #fff;
+    padding: 12px 6px;
+    border-radius: 3px;
+
+    &:hover {
+      border-color: #d9d9d9;
+    }
+  }
+
+  .selected {
+    border-color: #1890ff !important;
+  }
+
+  .component {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+`;
