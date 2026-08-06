@@ -4,14 +4,16 @@ import Home from '../pages/Home/index';
 import Login from '../pages/Login/index';
 import NotFound from '../pages/NotFound/index';
 import Register from '../pages/Register/index';
-import Edit from '../pages/question/Edit/index';
-import Statistics from '../pages/question/Statistics/index';
 import My from '../pages/Manage/My/index';
 import Star from '../pages/Manage/Star/index';
 import Trash from '../pages/Manage/Trash/index';
 import MainLayout from '../layouts/MainLayout/index';
 import ManageLayout from '../layouts/ManageLayout/index';
 import QuestionLayout from '../layouts/QuestionLayout/index';
+import { lazy } from 'react';
+
+const Edit = lazy(() => import('../pages/question/Edit/index'));
+const Statistics = lazy(() => import('../pages/question/Statistics/index'));
 
 const router = createBrowserRouter([
   {

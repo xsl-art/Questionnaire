@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useCallback, type FC } from 'react';
 import {
   questionComponentGroupList,
   type QuestionComponentConfig,
@@ -11,10 +11,15 @@ import { addComponent } from '@/store/componentsStore/componentsReducer';
 
 const { Title } = Typography;
 
-const getComponent = (component: QuestionComponentConfig<any>, dispatch: any) => {
-  const { title, type, Component, defaultProps } = component;
+interface ComponentItemProps {
+  component: QuestionComponentConfig<any>;
+}
 
-  const handleAddComponent = () => {
+const ComponentItem: FC<ComponentItemProps> = ({ component }) => {
+  const { title, type, Component, defaultProps } = component;
+  const dispatch = useDispatch();
+
+  const handleAddComponent = useCallback(() => {
     dispatch(
       addComponent({
         fe_id: nanoid(),
@@ -23,10 +28,10 @@ const getComponent = (component: QuestionComponentConfig<any>, dispatch: any) =>
         props: defaultProps,
       })
     );
-  };
+  }, [dispatch, title, type, defaultProps]);
 
   return (
-    <div key={type} className="wrapper" onClick={() => handleAddComponent()}>
+    <div className="wrapper" onClick={handleAddComponent}>
       <div className="component">
         <Component />
       </div>
@@ -34,7 +39,6 @@ const getComponent = (component: QuestionComponentConfig<any>, dispatch: any) =>
   );
 };
 const ComponentLib: FC = () => {
-  const dispatch = useDispatch();
   return (
     <ComponentLibWrapper>
       {questionComponentGroupList.map((group, index) => {
@@ -45,7 +49,11 @@ const ComponentLib: FC = () => {
             <Title level={3} style={{ fontSize: '16px', marginTop: index > 0 ? '20px' : '0' }}>
               {groupName}
             </Title>
-            <div>{components.map(component => getComponent(component, dispatch))}</div>
+            <div>
+              {components.map(component => (
+                <ComponentItem key={component.type} component={component} />
+              ))}
+            </div>
           </div>
         );
       })}

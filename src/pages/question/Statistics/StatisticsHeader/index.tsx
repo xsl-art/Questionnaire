@@ -1,4 +1,4 @@
-import { useRef, type FC } from 'react';
+import { useMemo, useRef, type FC } from 'react';
 import { StatisticsHeaderWrapper } from './style';
 import {
   Button,
@@ -29,10 +29,10 @@ const StatisticsHeader: FC = () => {
     message.success('复制成功');
   }
 
-  function genLinkAndQRCodeElem() {
+  const LinkAndQRCodeElement = useMemo(() => {
     if (!isPublished) return null;
 
-    // 拼接 url ，需要参考 C 端的规则
+    // 拼接 url
     const url = `http://localhost:3000/question/${id}`;
 
     // 定义二维码组件
@@ -53,7 +53,7 @@ const StatisticsHeader: FC = () => {
         </Popover>
       </Space>
     );
-  }
+  }, [id, isPublished]);
 
   return (
     <StatisticsHeaderWrapper>
@@ -63,7 +63,7 @@ const StatisticsHeader: FC = () => {
         </Button>
         <Title style={{ fontSize: '22px' }}>{title}</Title>
       </div>
-      <div className="center">{genLinkAndQRCodeElem()}</div>
+      <div className="center">{LinkAndQRCodeElement}</div>
       <div className="right">
         <Button type="primary">编辑问卷</Button>
       </div>
