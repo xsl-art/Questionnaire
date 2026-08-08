@@ -24,8 +24,8 @@ const PageStatistics: FC<PropsType> = (props: PropsType) => {
   const { loading } = useRequest(
     async () => {
       const res = await getStatisticsService(id, {
-        page: 1,
-        pageSize: 6,
+        page,
+        pageSize,
       });
       return res;
     },

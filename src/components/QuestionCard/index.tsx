@@ -27,7 +27,7 @@ const QuestionCard: FC<ListProps> = (props: ListProps) => {
       onSuccess: (res: any) => {
         message.success('复制成功');
         //跳转编辑页
-        navigate(`/question/edit/${res.id}`);
+        navigate(`/question/edit/${res.id || res._id}`);
       },
     }
   );

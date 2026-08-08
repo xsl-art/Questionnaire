@@ -53,7 +53,7 @@ export const componentsSlice = createSlice({
   initialState: INIT_STATE,
   reducers: {
     //重置所有组件
-    resetComponents: (state: ComponentsStateType, action: PayloadAction<ComponentsStateType>) => {
+    resetComponents: (_state: ComponentsStateType, action: PayloadAction<ComponentsStateType>) => {
       return action.payload;
     },
     //设置选中的组件id

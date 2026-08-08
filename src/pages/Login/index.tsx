@@ -8,23 +8,19 @@ import { loginService } from '@/api';
 
 const { Title } = Typography;
 
-const USERNAME_KEY = 'USERNAME';
-const PASSWORD_KEY = 'PASSWORD';
+const questionUser = 'QUESTION_USER';
 
 const rememberUser = (username: string, password: string) => {
-  localStorage.setItem(USERNAME_KEY, username);
-  localStorage.setItem(PASSWORD_KEY, password);
+  localStorage.setItem(questionUser, JSON.stringify({ username, password }));
 };
 
 const deleteUser = () => {
-  localStorage.removeItem(USERNAME_KEY);
-  localStorage.removeItem(PASSWORD_KEY);
+  localStorage.removeItem(questionUser);
 };
 
 const getUserInfo = () => {
   return {
-    username: localStorage.getItem(USERNAME_KEY),
-    password: localStorage.getItem(PASSWORD_KEY),
+    ...JSON.parse(localStorage.getItem(questionUser) || '{}'),
   };
 };
 
@@ -37,11 +33,10 @@ const Login: FC = () => {
       username,
       password,
     });
-  }, [form]);
+  }, []);
 
   const { run: handleLogin } = useRequest(
     async values => {
-      console.log(values);
       const res = await loginService(values);
       return res;
     },
@@ -49,10 +44,9 @@ const Login: FC = () => {
       manual: true,
       onSuccess: res => {
         message.success('登录成功');
-        navigate('/home');
         const token = res.token;
-        console.log('token', token);
         localStorage.setItem('token', token);
+        navigate('/manage/my');
       },
     }
   );

@@ -22,7 +22,7 @@ const ManageLayout: FC = () => {
   const { loading, run: handleCreate } = useRequest(createQuestionService, {
     manual: true,
     onSuccess: res => {
-      navigate(`/question/edit/${res.id}`);
+      navigate(`/question/edit/${res.id || res._id}`);
       message.success('新建问卷成功');
     },
   });
