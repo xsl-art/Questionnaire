@@ -8,6 +8,9 @@ import type {
   QuestionCheckboxProps,
   QuestionCheckboxStatisticsProps,
 } from './QuestionCheckbox/types';
+import type { QuestionImageProps } from './QuestionImage/types';
+import type { QuestionVideoProps } from './QuestionVideo/types';
+import type { QuestionImageUploadProps } from './QuestionImageUpload/types';
 import questionInputConfig from './QuestionInput';
 import questionTitleConfig from './QuestionTitle';
 import QuestionParagraphConfig from './QuestionParagraph';
@@ -15,6 +18,9 @@ import QuestionInfoConfig from './QuestionInfo';
 import QuestionTextareaConfig from './QuestionTextarea';
 import QuestionRadioConfig from './QuestionRadio';
 import QuestionCheckboxConfig from './QuestionCheckbox';
+import QuestionImageConfig from './QuestionImage';
+import QuestionVideoConfig from './QuestionVideo';
+import QuestionImageUploadConfig from './QuestionImageUpload';
 import type { FC } from 'react';
 
 //统一各个组件的prop type
@@ -24,7 +30,10 @@ export type ComponentPropsType = QuestionTitleProps &
   QuestionInfoProps &
   QuestionTextareaProps &
   QuestionRadioProps &
-  QuestionCheckboxProps;
+  QuestionCheckboxProps &
+  QuestionImageProps &
+  QuestionVideoProps &
+  QuestionImageUploadProps;
 
 //统一组件的prop type
 type ComponentStatisticsPropsType = QuestionRadioStatisticsProps & QuestionCheckboxStatisticsProps;
@@ -48,6 +57,9 @@ const questionComponentConfigList: QuestionComponentConfig[] = [
   QuestionTextareaConfig,
   QuestionRadioConfig,
   QuestionCheckboxConfig,
+  QuestionImageConfig,
+  QuestionVideoConfig,
+  QuestionImageUploadConfig,
 ];
 
 //组件分组
@@ -66,6 +78,11 @@ export const questionComponentGroupList = [
     groupId: 'select',
     groupName: '用户选择',
     components: [QuestionRadioConfig, QuestionCheckboxConfig],
+  },
+  {
+    groupId: 'media',
+    groupName: '富媒体',
+    components: [QuestionImageConfig, QuestionVideoConfig, QuestionImageUploadConfig],
   },
 ];
 
