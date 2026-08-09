@@ -33,7 +33,7 @@ const Trash: FC = () => {
   const { list = [], total = 0 } = data;
 
   //选中ids
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   //恢复选中问卷
   const { loading: restoreLoading, run: handleRestore } = useRequest(
@@ -123,14 +123,14 @@ const Trash: FC = () => {
                 columns={tableColumns}
                 dataSource={list}
                 pagination={false}
-                rowKey={record => record.id}
+                rowKey={(record: any) => record.id}
                 rowSelection={{
                   type: 'checkbox',
                   //selectedRowKeys：选中行的id数组
                   //selectedRows：选中行的数组对象
                   onChange: (selectedRowKeys, selectedRows) => {
                     console.log(selectedRowKeys, selectedRows);
-                    setSelectedIds(selectedRowKeys as number[]);
+                    setSelectedIds(selectedRowKeys as string[]);
                   },
                 }}
               />

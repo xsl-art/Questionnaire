@@ -4,22 +4,14 @@ import List from '@/components/List';
 import { useLoadQuestionListData } from '@/hooks/useLoadQuestionListData';
 import { MyWrapper } from './style';
 import { Empty, Spin } from 'antd';
+import { useLoadUserData } from '@/hooks/useLoadUserInfoData';
 
 const My: FC = () => {
-  /*  const [myList, setMyList] = useState<ListProps[]>([]);
-  const [total, setTotal] = useState<number>(0); */
-
   const { data = {}, loading } = useLoadQuestionListData();
-
   const { list = [], total = 0 } = data;
+  //保存登录信息
+  useLoadUserData();
 
-  /*   useEffect(() => {
-    getQuestionListService().then(res => {
-      const { list = [], total = 0 } = res;
-      setMyList(list.slice(0, 6));
-      setTotal(total);
-    });
-  }); */
   return (
     <MyWrapper>
       {loading && (

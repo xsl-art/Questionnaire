@@ -46,7 +46,7 @@ const PublishButton: FC = () => {
   const { loading, run: publish } = useRequest(
     async () => {
       if (!id) return;
-      await updateQuestionService(Number(id), { ...pageInfo, componentList, isPublish: true });
+      await updateQuestionService(id, { ...pageInfo, componentList, isPublish: true });
     },
     {
       manual: true,
@@ -75,7 +75,7 @@ const SaveButton: FC = () => {
   const { loading, run: save } = useRequest(
     async () => {
       if (!id) return;
-      await updateQuestionService(Number(id), { ...pageInfo, componentList });
+      await updateQuestionService(id, { ...pageInfo, componentList });
     },
     { manual: true }
   );

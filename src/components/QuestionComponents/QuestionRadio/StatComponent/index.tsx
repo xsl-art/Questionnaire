@@ -23,7 +23,7 @@ const ChartComponent: FC<QuestionRadioStatisticsProps> = ({ stat }) => {
             fill="#8884d8"
             label={(i: any) => `${i.name}: ${format(i.count / sum)}%`}
           >
-            {stat.map((i, index) => {
+            {stat.map((_i, index) => {
               return <Cell key={index} fill={STAT_COLORS[index]} />;
             })}
           </Pie>

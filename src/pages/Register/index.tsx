@@ -91,7 +91,7 @@ const Register: FC = () => {
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 2, span: 16 }}>
             <Space>
-              <Button type="primary" htmlType="submit" onClick={handleRegister}>
+              <Button type="primary" htmlType="submit">
                 注册
               </Button>
               <Link to="/login" className="login-link">

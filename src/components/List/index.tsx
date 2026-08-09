@@ -5,7 +5,7 @@ import SearchArea from '@/components/Search/index.tsx';
 import Page, { type PaginationProps } from '../Page/index.tsx';
 
 export interface ListProps {
-  id: number;
+  id: string;
   title: string;
   isPublished: boolean;
   isStared: boolean;

@@ -38,7 +38,7 @@ export const getQuestionListService = async (
 
 //更新单个问卷
 export const updateQuestionService = async (
-  id: number,
+  id: string,
   option: { [key: string]: any }
 ): Promise<ResDataType> => {
   const url = `/api/question/${id}`;
@@ -47,14 +47,14 @@ export const updateQuestionService = async (
 };
 
 //复制问卷
-export const copyQuestionService = async (id: number): Promise<ResDataType> => {
+export const copyQuestionService = async (id: string): Promise<ResDataType> => {
   const url = `/api/question/duplicate/${id}`;
   const data = (await httpInstance.post(url)) as ResDataType;
   return data;
 };
 
 //彻底删除问卷
-export const deleteQuestionService = async (ids: number[]): Promise<ResDataType> => {
+export const deleteQuestionService = async (ids: string[]): Promise<ResDataType> => {
   const url = '/api/question';
   const data = (await httpInstance.delete(url, { data: { ids } })) as ResDataType;
   return data;
