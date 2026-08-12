@@ -1,6 +1,7 @@
 import type { UploadFile } from 'antd';
 
 export type QuestionImageUploadProps = {
+  fe_id?: string;
   title?: string;
   maxCount?: number;
   disabled?: boolean;

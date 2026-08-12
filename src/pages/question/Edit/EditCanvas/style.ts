@@ -28,4 +28,14 @@ export const EditCanvasWrapper = styled.div`
     opacity: 0.5;
     cussor: not-allowed;
   }
+
+  .preview-hidden {
+    opacity: 0.45;
+    background-color: #f5f5f5;
+    border-style: dashed;
+  }
+
+  &.preview-mode .component {
+    pointer-events: auto;
+  }
 `;

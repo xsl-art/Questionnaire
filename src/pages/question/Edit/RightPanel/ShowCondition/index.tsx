@@ -1,5 +1,5 @@
 import { type FC, useState } from 'react';
-import { Select, Radio, Button, Input, Space, Card, Typography } from 'antd';
+import { Select, Radio, Button, Input, Space, Card, Typography, message } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useComponentInfo } from '@/hooks/useComponentInfo';
 import { useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid';
 import {
   componentConditionFields,
   getOperatorsByType,
+  operatorNeedsTargetValue,
 } from '@/components/QuestionComponents/conditionFields';
 import type {
   ConditionRule,
@@ -14,6 +15,7 @@ import type {
   ConditionOperator,
 } from '@/components/QuestionComponents/type';
 import { updateVisibleCondition } from '@/store/componentsStore/componentsReducer';
+import { checkCircularConditionForGroup } from '@/utils/circularConditionCheck';
 
 const { Text } = Typography;
 
@@ -79,12 +81,23 @@ const ShowCondition: FC = () => {
   // 保存到 Redux
   const handleSave = () => {
     // 过滤掉未填写完整的规则
-    const validRules = conditionGroup.rules.filter(
-      rule => rule.sourceId && rule.sourceField && rule.operator && rule.targetValue !== ''
-    );
+    const validRules = conditionGroup.rules.filter(rule => {
+      if (!rule.sourceId || !rule.sourceField || !rule.operator) return false;
+      if (operatorNeedsTargetValue(rule.operator)) {
+        return rule.targetValue !== '';
+      }
+      return true;
+    });
 
     const finalGroup: ConditionGroup | null =
       validRules.length > 0 ? { ...conditionGroup, rules: validRules } : null;
+
+    // 循环引用检测
+    const cycleResult = checkCircularConditionForGroup(componentList, selectedId, finalGroup);
+    if (cycleResult.hasCycle) {
+      message.error(`保存失败：条件显示存在循环引用（${cycleResult.cycle?.join(' → ')}），请检查`);
+      return;
+    }
 
     dispatch(
       updateVisibleCondition({
@@ -166,6 +179,8 @@ const RuleItem: FC<RuleItemProps> = ({ rule, index, triggerOptions, onChange, on
   // 当前字段支持的运算符
   const operatorOptions = getOperatorsByType(fieldType);
 
+  const needsTargetValue = operatorNeedsTargetValue(rule.operator);
+
   return (
     <Card
       size="small"
@@ -223,7 +238,13 @@ const RuleItem: FC<RuleItemProps> = ({ rule, index, triggerOptions, onChange, on
             style={{ width: '100%' }}
             placeholder="请选择运算符"
             value={rule.operator}
-            onChange={(operator: ConditionOperator) => onChange({ operator })}
+            onChange={(operator: ConditionOperator) => {
+              const updates: Partial<ConditionRule> = { operator };
+              if (!operatorNeedsTargetValue(operator)) {
+                updates.targetValue = undefined as unknown as string;
+              }
+              onChange(updates);
+            }}
             options={operatorOptions.map(op => ({
               label: op.label,
               value: op.value,
@@ -233,16 +254,18 @@ const RuleItem: FC<RuleItemProps> = ({ rule, index, triggerOptions, onChange, on
         </div>
 
         {/* 4. 输入目标值 */}
-        <div>
-          <Text type="secondary">目标值</Text>
-          <TargetValueInput
-            fieldType={fieldType}
-            triggerComponent={triggerComponent}
-            value={rule.targetValue}
-            onChange={value => onChange({ targetValue: value })}
-            disabled={!rule.operator}
-          />
-        </div>
+        {needsTargetValue && (
+          <div>
+            <Text type="secondary">目标值</Text>
+            <TargetValueInput
+              fieldType={fieldType}
+              triggerComponent={triggerComponent}
+              value={rule.targetValue}
+              onChange={value => onChange({ targetValue: value })}
+              disabled={!rule.operator}
+            />
+          </div>
+        )}
       </Space>
     </Card>
   );

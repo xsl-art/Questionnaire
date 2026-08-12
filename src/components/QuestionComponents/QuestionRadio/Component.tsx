@@ -1,15 +1,38 @@
 import { type FC } from 'react';
 import { type QuestionRadioProps, defaultQuestionRadioProps } from './types';
 import { Typography, Radio, Space } from 'antd';
+import { usePreviewContext } from '@/contexts/PreviewContext';
 
 const { Paragraph } = Typography;
+
 const QuestionRadio: FC<QuestionRadioProps> = (props: QuestionRadioProps) => {
-  const { title, isVertical, options, value } = { ...defaultQuestionRadioProps, ...props };
-  console.log('Radio render:', { value, options });
+  const {
+    fe_id,
+    title,
+    isVertical,
+    options,
+    value: propValue,
+  } = {
+    ...defaultQuestionRadioProps,
+    ...props,
+  };
+
+  const { isPreviewMode, mockAnswers, setMockAnswer } = usePreviewContext();
+  const previewValue =
+    fe_id !== undefined && mockAnswers[fe_id] !== undefined
+      ? (mockAnswers[fe_id] as string)
+      : propValue;
+
+  const handleChange = (e: any) => {
+    if (isPreviewMode && fe_id) {
+      setMockAnswer(fe_id, e.target.value);
+    }
+  };
+
   return (
     <>
       <Paragraph strong>{title}</Paragraph>
-      <Radio.Group value={value}>
+      <Radio.Group value={previewValue} onChange={handleChange} disabled={!isPreviewMode}>
         <Space direction={isVertical ? 'vertical' : 'horizontal'}>
           {options?.map(item => {
             const { text, value: itemValue } = item;

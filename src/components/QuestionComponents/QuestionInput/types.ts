@@ -1,4 +1,5 @@
 export type QuestionInputProps = {
+  fe_id?: string;
   title?: string;
   placeholder?: string;
   onChange?: (newProps: QuestionInputProps) => void;

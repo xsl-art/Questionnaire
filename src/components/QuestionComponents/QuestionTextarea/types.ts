@@ -1,4 +1,5 @@
 export type QuestionTextareaProps = {
+  fe_id?: string;
   title?: string;
   placeholder?: string;
   onChange?: (newProps: QuestionTextareaProps) => void;

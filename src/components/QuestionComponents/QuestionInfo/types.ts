@@ -1,4 +1,5 @@
 export type QuestionInfoProps = {
+  fe_id?: string;
   title?: string;
   desc?: string;
 

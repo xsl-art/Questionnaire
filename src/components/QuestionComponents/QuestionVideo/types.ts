@@ -1,4 +1,5 @@
 export type QuestionVideoProps = {
+  fe_id?: string;
   src?: string;
   width?: number | string;
   height?: number | string;

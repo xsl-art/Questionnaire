@@ -2,9 +2,12 @@ import type { ConditionRule, ConditionGroup } from '@/components/QuestionCompone
 
 /**
  * 判断值是否为空（未填写/未选择）
+ * 对数组额外判断长度
  */
-const isEmptyValue = (value: unknown): boolean => {
-  return value === undefined || value === null || value === '';
+export const isValueEmpty = (value: unknown): boolean => {
+  if (value === undefined || value === null || value === '') return true;
+  if (Array.isArray(value)) return value.length === 0;
+  return false;
 };
 
 /**
@@ -29,9 +32,17 @@ export const evaluateCondition = (
 
   // 获取触发组件的实际值
   const actualValue = componentValues[sourceId]?.[sourceField];
+  const empty = isValueEmpty(actualValue);
+
+  switch (operator) {
+    case 'is_empty':
+      return empty;
+    case 'is_not_empty':
+      return !empty;
+  }
 
   // 完全未填写时：ne 算满足，其他算不满足
-  if (isEmptyValue(actualValue)) {
+  if (empty) {
     return operator === 'ne';
   }
 

@@ -4,6 +4,7 @@ import type { ComponentPropsType, ConditionGroup } from '@/components/QuestionCo
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 import { arrayMove } from '@dnd-kit/sortable';
+import { checkCircularConditionForGroup } from '@/utils/circularConditionCheck';
 
 export type ComponentInfoType = {
   fe_id: string;
@@ -197,6 +198,10 @@ export const componentsSlice = createSlice({
       action: PayloadAction<{ fe_id: string; visibleCondition: ConditionGroup | null }>
     ) => {
       const { fe_id, visibleCondition } = action.payload;
+      // 防御性循环引用检测：若会形成环则不更新
+      const result = checkCircularConditionForGroup(state.componentList, fe_id, visibleCondition);
+      if (result.hasCycle) return;
+
       const currentComponent = state.componentList.find(item => item.fe_id === fe_id);
       if (currentComponent) {
         currentComponent.visibleCondition = visibleCondition;

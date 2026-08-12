@@ -4,6 +4,7 @@ export type OptionsType = {
 };
 
 export type QuestionRadioProps = {
+  fe_id?: string;
   title?: string;
   isVertical?: boolean;
   options?: OptionsType[];

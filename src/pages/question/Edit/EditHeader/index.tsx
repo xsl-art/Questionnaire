@@ -8,6 +8,7 @@ import {
   DownOutlined,
   EditOutlined,
   EyeInvisibleOutlined,
+  EyeOutlined,
   LeftCircleOutlined,
   LoadingOutlined,
   LockOutlined,
@@ -26,10 +27,12 @@ import {
   pasteSelectedComponent,
   moveComponent,
 } from '@/store/componentsStore/componentsReducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useComponentInfo } from '@/hooks/useComponentInfo';
 import { usePageInfo } from '@/hooks/usePageInfo';
 import { updateTitle } from '@/store/pageInfoStore/pageInfoReducer';
+import { togglePreviewMode } from '@/store/previewStore/previewReducer';
+import type { StateType } from '@/store';
 import { useDebounceEffect, useKeyPress, useRequest } from 'ahooks';
 import { updateQuestionService } from '@/api';
 import { ActionCreators as UndoCreators } from 'redux-undo';
@@ -141,6 +144,7 @@ const EditHeader: FC = () => {
 
   const { selectedId, selectedComponent, copiedComponent, componentList = [] } = useComponentInfo();
   const { isLocked } = selectedComponent || {};
+  const isPreviewMode = useSelector((state: StateType) => state.preview.isPreviewMode);
 
   const length = componentList.length;
   const selectedIndex = componentList.findIndex(item => item.fe_id === selectedId);
@@ -183,6 +187,10 @@ const EditHeader: FC = () => {
 
   const handleRedo = () => {
     dispatch(UndoCreators.redo());
+  };
+
+  const handleTogglePreview = () => {
+    dispatch(togglePreviewMode());
   };
 
   return (
@@ -253,6 +261,14 @@ const EditHeader: FC = () => {
               disabled={isLast}
               icon={<DownOutlined />}
               onClick={() => handleMOveDown()}
+            ></Button>
+          </Tooltip>
+          <Tooltip title={isPreviewMode ? '退出预览' : '条件预览'}>
+            <Button
+              shape="circle"
+              type={isPreviewMode ? 'primary' : 'default'}
+              icon={isPreviewMode ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+              onClick={() => handleTogglePreview()}
             ></Button>
           </Tooltip>
           <Tooltip title="撤销">

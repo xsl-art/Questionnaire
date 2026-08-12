@@ -1,4 +1,5 @@
 export type QuestionImageProps = {
+  fe_id?: string;
   src?: string;
   alt?: string;
   width?: number | string;

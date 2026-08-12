@@ -50,7 +50,18 @@ export interface QuestionComponentConfig<T = any> {
 
 //条件组件配置
 export type ConditionOperator =
-  'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'in' | 'not_in' | 'not_contains';
+  | 'eq'
+  | 'ne'
+  | 'gt'
+  | 'lt'
+  | 'gte'
+  | 'lte'
+  | 'contains'
+  | 'in'
+  | 'not_in'
+  | 'not_contains'
+  | 'is_empty'
+  | 'is_not_empty';
 
 export type ConditionRule = {
   id: string;

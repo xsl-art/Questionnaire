@@ -1,4 +1,5 @@
 export type QuestionParagraphProps = {
+  fe_id?: string;
   text?: string;
   isCenter?: boolean;
   onChange?: (newProps: QuestionParagraphProps) => void;
