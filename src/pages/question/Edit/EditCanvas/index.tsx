@@ -31,6 +31,9 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
   const { componentList, selectedId } = useComponentInfo();
   const dispatch = useDispatch();
 
+  // 编辑画布始终显示所有组件，避免设置条件后无法继续编辑
+  const visibleComponentList = componentList;
+
   //组件选中状态
   const handleSelect = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
@@ -49,7 +52,7 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
   }
 
   //SortableContainer组件的items属性需要id
-  const componentListWithId = componentList.map(item => ({ ...item, id: item.fe_id }));
+  const componentListWithId = visibleComponentList.map(item => ({ ...item, id: item.fe_id }));
 
   //拖拽牌序结束
   const handleDragEnd = (oldIndex: number, newIndex: number) => {
@@ -59,7 +62,7 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
   return (
     <EditCanvasWrapper>
       <SortableContainer items={componentListWithId} onDragEnd={handleDragEnd}>
-        {componentList
+        {visibleComponentList
           .filter(item => !item.isHidden)
           .map(item => {
             const { fe_id, isLocked } = item;

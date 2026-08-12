@@ -48,6 +48,24 @@ export interface QuestionComponentConfig<T = any> {
   defaultProps: T;
 }
 
+//条件组件配置
+export type ConditionOperator =
+  'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'in' | 'not_in' | 'not_contains';
+
+export type ConditionRule = {
+  id: string;
+  sourceId: string;
+  sourceField: string;
+  operator: ConditionOperator;
+  targetValue: string | number | boolean | string[];
+};
+
+export type ConditionGroup = {
+  id: string;
+  logic: 'AND' | 'OR';
+  rules: ConditionRule[];
+};
+
 //全部组件配置的列表
 const questionComponentConfigList: QuestionComponentConfig[] = [
   questionTitleConfig,

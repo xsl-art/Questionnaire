@@ -10,6 +10,7 @@ export type QuestionCheckboxProps = {
   list?: OptionType[];
   onChange?: (newProps: QuestionCheckboxProps) => void;
   disabled?: boolean;
+  value?: string[];
 };
 
 export const defaultQuestionCheckboxProps: QuestionCheckboxProps = {
@@ -32,6 +33,7 @@ export const defaultQuestionCheckboxProps: QuestionCheckboxProps = {
       checked: false,
     },
   ],
+  value: [],
 };
 
 //统计属性

@@ -13,13 +13,14 @@ import {
 } from 'antd';
 import { CopyOutlined, LeftOutlined, QrcodeOutlined } from '@ant-design/icons';
 import { usePageInfo } from '@/hooks/usePageInfo';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const { Title } = Typography;
 const StatisticsHeader: FC = () => {
   const { title, isPublished } = usePageInfo();
   const { id } = useParams();
   const urlInputRef = useRef<InputRef>(null);
+  const navigate = useNavigate();
 
   function copy() {
     const elem = urlInputRef.current;
@@ -58,14 +59,16 @@ const StatisticsHeader: FC = () => {
   return (
     <StatisticsHeaderWrapper>
       <div className="left">
-        <Button type="text" icon={<LeftOutlined />}>
+        <Button type="text" icon={<LeftOutlined />} onClick={() => navigate('/manage/my')}>
           返回
         </Button>
         <Title style={{ fontSize: '22px' }}>{title}</Title>
       </div>
       <div className="center">{LinkAndQRCodeElement}</div>
       <div className="right">
-        <Button type="primary">编辑问卷</Button>
+        <Button type="primary" onClick={() => navigate(`/manage/question/${id}`)}>
+          编辑问卷
+        </Button>
       </div>
     </StatisticsHeaderWrapper>
   );

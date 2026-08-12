@@ -1,9 +1,17 @@
 import { useEffect, type FC } from 'react';
-import { Form, Input, Upload, Button, Space } from 'antd';
+import { Form, Input, Upload, Button, Space, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import type { QuestionImageProps } from '../types';
 import { uploadImageService } from '@/api/upload';
 import { PropComponentWrapper } from './style';
+
+const OBJECT_FIT_OPTIONS = [
+  { value: 'contain', label: 'contain（完整显示）' },
+  { value: 'cover', label: 'cover（铺满裁剪）' },
+  { value: 'fill', label: 'fill（拉伸填充）' },
+  { value: 'none', label: 'none（原始尺寸）' },
+  { value: 'scale-down', label: 'scale-down（自适应缩小）' },
+];
 
 const PropComponent: FC<QuestionImageProps> = (props: QuestionImageProps) => {
   const [form] = Form.useForm();
@@ -68,7 +76,7 @@ const PropComponent: FC<QuestionImageProps> = (props: QuestionImageProps) => {
           <Input placeholder="例如 auto 或 200" />
         </Form.Item>
         <Form.Item label="填充方式" name="objectFit">
-          <Input placeholder="contain / cover / fill / none / scale-down" />
+          <Select placeholder="请选择填充方式" options={OBJECT_FIT_OPTIONS} />
         </Form.Item>
       </Form>
     </PropComponentWrapper>

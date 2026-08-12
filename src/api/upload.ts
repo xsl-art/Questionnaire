@@ -77,5 +77,9 @@ export const uploadImageService = async (
   formData.append('file', blob, file.name);
 
   const data = (await httpInstance.post('/api/upload/image', formData)) as ResDataType;
-  return { url: data.url as string };
+  let url = data.url as string;
+  if (url && url.startsWith('/')) {
+    url = `http://localhost:3005${url}`;
+  }
+  return { url };
 };

@@ -13,9 +13,6 @@ export type ResDataType = {
 const httpInstance = axios.create({
   baseURL: 'http://localhost:3005',
   timeout: 5000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 httpInstance.interceptors.request.use(

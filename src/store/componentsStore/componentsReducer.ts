@@ -1,6 +1,6 @@
 //存储组件列表数据
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { ComponentPropsType } from '@/components/QuestionComponents/type';
+import type { ComponentPropsType, ConditionGroup } from '@/components/QuestionComponents/type';
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -12,6 +12,7 @@ export type ComponentInfoType = {
   isHidden?: boolean;
   isLocked?: boolean;
   props: ComponentPropsType;
+  visibleCondition?: ConditionGroup | null; //可见条件
 };
 
 export type ComponentsStateType = {
@@ -190,6 +191,17 @@ export const componentsSlice = createSlice({
       const { oldIndex, newIndex } = action.payload;
       state.componentList = arrayMove(currentComponent, oldIndex, newIndex);
     },
+    //更新组件可见条件
+    updateVisibleCondition: (
+      state: ComponentsStateType,
+      action: PayloadAction<{ fe_id: string; visibleCondition: ConditionGroup | null }>
+    ) => {
+      const { fe_id, visibleCondition } = action.payload;
+      const currentComponent = state.componentList.find(item => item.fe_id === fe_id);
+      if (currentComponent) {
+        currentComponent.visibleCondition = visibleCondition;
+      }
+    },
   },
 });
 
@@ -207,5 +219,6 @@ export const {
   moveDown,
   changeComponentTitle,
   moveComponent,
+  updateVisibleCondition,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;
