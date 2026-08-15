@@ -5,12 +5,13 @@ export type OptionType = {
 };
 
 export type QuestionCheckboxProps = {
+  fe_id?: string;
   title?: string;
   isVertical?: boolean;
   list?: OptionType[];
   onChange?: (newProps: QuestionCheckboxProps) => void;
   disabled?: boolean;
-  value?: string[];
+  value?: string[]; //选中的选项值
 };
 
 export const defaultQuestionCheckboxProps: QuestionCheckboxProps = {
@@ -39,4 +40,5 @@ export const defaultQuestionCheckboxProps: QuestionCheckboxProps = {
 //统计属性
 export type QuestionCheckboxStatisticsProps = {
   stat: Array<{ name: string; count: number }>;
+  list?: OptionType[];
 };

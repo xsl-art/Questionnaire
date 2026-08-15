@@ -1,5 +1,4 @@
 import { useEffect, type FC } from 'react';
-import { PropComponentWrapper } from './style';
 import type { QuestionTextareaProps } from '../types';
 import { Form, Input } from 'antd';
 const { TextArea } = Input;
@@ -18,7 +17,7 @@ const PropComponent: FC<QuestionTextareaProps> = (props: QuestionTextareaProps) 
   };
 
   return (
-    <PropComponentWrapper>
+    <>
       <Form
         form={form}
         layout="vertical"
@@ -33,7 +32,7 @@ const PropComponent: FC<QuestionTextareaProps> = (props: QuestionTextareaProps) 
           <TextArea placeholder="请输入提示文本" />
         </Form.Item>
       </Form>
-    </PropComponentWrapper>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const UserInfoWrapper = styled.div`
+  cursor: pointer;
   .avatar {
     width: 40px;
     height: 40px;

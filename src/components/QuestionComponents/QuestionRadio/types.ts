@@ -37,4 +37,5 @@ export const defaultQuestionRadioProps: QuestionRadioProps = {
 //统计属性
 export type QuestionRadioStatisticsProps = {
   stat: Array<{ name: string; count: number }>;
+  options?: OptionsType[];
 };

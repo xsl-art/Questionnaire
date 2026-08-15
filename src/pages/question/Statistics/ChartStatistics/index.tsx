@@ -1,11 +1,13 @@
-import { useEffect, useState, type FC } from 'react';
-import { Typography } from 'antd';
+import { useEffect, useMemo, useState, type FC } from 'react';
+import { Empty, Typography } from 'antd';
 import { useRequest } from 'ahooks';
 import { getStatisticsDetailService } from '@/api';
 import { useParams } from 'react-router-dom';
 import { getComponentConfigByType } from '@/components/QuestionComponents/type';
+import { useComponentInfo } from '@/hooks/useComponentInfo';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
+
 type PropsType = {
   selectedComponentId: string;
   selectedComponentType: string;
@@ -14,6 +16,15 @@ type PropsType = {
 const ChartStatistics: FC<PropsType> = ({ selectedComponentId, selectedComponentType }) => {
   const { id = '' } = useParams();
   const [stat, setStat] = useState([]);
+
+  const { componentList } = useComponentInfo();
+  const selectedComponent = useMemo(
+    () => componentList.find(item => item.fe_id === selectedComponentId),
+    [componentList, selectedComponentId]
+  );
+  const selectedTitle = selectedComponent
+    ? (selectedComponent.props as { title?: string }).title || selectedComponent.title
+    : '';
 
   const { run } = useRequest(
     async () => await getStatisticsDetailService(id, selectedComponentId),
@@ -29,19 +40,49 @@ const ChartStatistics: FC<PropsType> = ({ selectedComponentId, selectedComponent
     if (selectedComponentId) {
       run();
     }
-  }, [id, selectedComponentId]);
+  }, [id, selectedComponentId, run]);
 
   function generateChartComponent() {
-    if (!selectedComponentId) return <div>请选择组件</div>;
+    if (!selectedComponentId) {
+      return (
+        <div style={{ textAlign: 'center', padding: '48px 0', color: '#999' }}>
+          请在左侧或表格中选择要查看的组件
+        </div>
+      );
+    }
+
     const { StatComponent } = getComponentConfigByType(selectedComponentType) || {};
-    if (!StatComponent) return <div>该组件不存在统计图表</div>;
-    return <StatComponent stat={stat} />;
+    if (!StatComponent) {
+      return (
+        <div style={{ textAlign: 'center', padding: '48px 0', color: '#999' }}>
+          该组件类型暂无图表统计
+        </div>
+      );
+    }
+
+    if (!stat || stat.length === 0) {
+      return <Empty description="暂无数据" />;
+    }
+
+    const statProps = {
+      stat,
+      options: (selectedComponent?.props as { options?: { value: string; text: string }[] })
+        .options,
+      list: (selectedComponent?.props as { list?: { value: string; text: string }[] }).list,
+    };
+
+    return <StatComponent {...statProps} />;
   }
 
   return (
     <>
       <Title level={3}>图表统计</Title>
-      <div>{generateChartComponent()}</div>
+      {selectedComponentId && (
+        <Text type="secondary">
+          当前统计字段：<Text strong>{selectedTitle}</Text>
+        </Text>
+      )}
+      <div style={{ marginTop: 16 }}>{generateChartComponent()}</div>
     </>
   );
 };

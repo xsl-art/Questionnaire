@@ -1,5 +1,4 @@
 import { useEffect, type FC } from 'react';
-import { PropComponentWrapper } from './style';
 import type { QuestionTitleProps } from '../types';
 import { Checkbox, Form, Input, Select } from 'antd';
 const PropComponent: FC<QuestionTitleProps> = (props: QuestionTitleProps) => {
@@ -17,7 +16,7 @@ const PropComponent: FC<QuestionTitleProps> = (props: QuestionTitleProps) => {
   };
 
   return (
-    <PropComponentWrapper>
+    <>
       <Form
         form={form}
         layout="vertical"
@@ -43,7 +42,7 @@ const PropComponent: FC<QuestionTitleProps> = (props: QuestionTitleProps) => {
           <Checkbox>居中显示</Checkbox>
         </Form.Item>
       </Form>
-    </PropComponentWrapper>
+    </>
   );
 };
 

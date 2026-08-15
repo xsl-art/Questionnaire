@@ -1,5 +1,4 @@
 import { useEffect, type FC } from 'react';
-import { PropComponentWrapper } from './style';
 import type { QuestionInputProps } from '../types';
 import { Form, Input } from 'antd';
 const PropComponent: FC<QuestionInputProps> = (props: QuestionInputProps) => {
@@ -17,7 +16,7 @@ const PropComponent: FC<QuestionInputProps> = (props: QuestionInputProps) => {
   };
 
   return (
-    <PropComponentWrapper>
+    <>
       <Form
         form={form}
         layout="vertical"
@@ -32,7 +31,7 @@ const PropComponent: FC<QuestionInputProps> = (props: QuestionInputProps) => {
           <Input placeholder="请输入提示文本" />
         </Form.Item>
       </Form>
-    </PropComponentWrapper>
+    </>
   );
 };
 

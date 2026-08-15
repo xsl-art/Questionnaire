@@ -148,7 +148,6 @@ export const extractComponentValue = (component: {
     case 'questionRadio':
       return { value: props.value || '' };
     case 'questionCheckbox': {
-      // 从 list 中读取 checked 状态，props.value 不保证实时维护
       const checkedValues =
         props.list
           ?.filter((item: { checked?: boolean; value: string }) => item.checked)

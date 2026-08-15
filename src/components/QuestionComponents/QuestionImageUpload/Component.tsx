@@ -61,7 +61,6 @@ const QuestionImageUpload: FC<QuestionImageUploadProps> = (props: QuestionImageU
         onChange={handleChange}
         onDrop={e => {
           e.preventDefault();
-          console.log(e.dataTransfer.files);
         }}
       >
         {fileList.length >= (maxCount || 5) ? null : <UploadButton maxCount={maxCount} />}

@@ -15,8 +15,8 @@ export const componentConditionFields: Record<
 };
 
 const COMMON_OPERATORS: { value: ConditionOperator; label: string }[] = [
-  { value: 'is_empty', label: '未填写' },
-  { value: 'is_not_empty', label: '已填写' },
+  { value: 'is_empty', label: '空' },
+  { value: 'is_not_empty', label: '非空' },
 ];
 
 /**

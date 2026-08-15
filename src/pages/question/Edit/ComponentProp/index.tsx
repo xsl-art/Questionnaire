@@ -22,7 +22,6 @@ const ComponentProp: FC = () => {
   const handleChange = (newProps: ComponentPropsType) => {
     if (selectedComponent == null) return;
     const { fe_id } = selectedComponent;
-    //console.log('组件属性变化', fe_id, newProps);
     dispatch(updateComponent({ fe_id, newProps }));
   };
 

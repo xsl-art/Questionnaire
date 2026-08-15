@@ -22,7 +22,7 @@ const UserInfo: FC = () => {
     <UserInfoWrapper>
       {isLogined ? (
         <div className="user-info">
-          <div className="avatar" onClick={() => logout()}>
+          <div className="avatar" onClick={() => logout()} title="退出登录">
             {(nickname || username)?.charAt(0)}
           </div>
         </div>

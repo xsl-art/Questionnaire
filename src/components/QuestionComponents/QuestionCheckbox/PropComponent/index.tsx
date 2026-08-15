@@ -1,7 +1,12 @@
 import { type FC } from 'react';
 import { type OptionType, type QuestionCheckboxProps } from '../types';
 import { Button, Checkbox, Form, Input, Space } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  DownCircleOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  UpCircleOutlined,
+} from '@ant-design/icons';
 import { nanoid } from 'nanoid';
 const PropComponent: FC<QuestionCheckboxProps> = (props: QuestionCheckboxProps) => {
   const { title, isVertical, list, onChange, disabled } = props;
@@ -9,19 +14,6 @@ const PropComponent: FC<QuestionCheckboxProps> = (props: QuestionCheckboxProps) 
 
   const handleValueChange = () => {
     if (onChange) onChange(form.getFieldsValue());
-
-    /*  const newValues = form.getFieldsValue() as QuestionCheckboxProps;
-    if (newValues.list) {
-      newValues.list = newValues.list.filter(item => item.text != null);
-    }
-
-    const { list = [] } = newValues;
-    list.forEach(item => {
-      if (item.value) return;
-      item.value = nanoid();
-    });
-
-    onChange(newValues); */
   };
 
   return (
@@ -37,9 +29,10 @@ const PropComponent: FC<QuestionCheckboxProps> = (props: QuestionCheckboxProps) 
       </Form.Item>
       <Form.Item label="选项">
         <Form.List name="list">
-          {(fields, { add, remove }) => (
+          {(fields, { add, remove, move }) => (
             <>
               {fields.map((item, index) => {
+                //name是list的索引
                 const { key, name } = item;
                 return (
                   <Space key={key} align="baseline">
@@ -71,6 +64,28 @@ const PropComponent: FC<QuestionCheckboxProps> = (props: QuestionCheckboxProps) 
                     </Form.Item>
 
                     {index > 0 && (
+                      <UpCircleOutlined
+                        onClick={() => {
+                          move(index, index - 1);
+                          setTimeout(() => {
+                            handleValueChange();
+                          }, 0);
+                        }}
+                      />
+                    )}
+
+                    {index < fields.length - 1 && (
+                      <DownCircleOutlined
+                        onClick={() => {
+                          move(index, index + 1);
+                          setTimeout(() => {
+                            handleValueChange();
+                          }, 0);
+                        }}
+                      />
+                    )}
+
+                    {fields?.length > 1 && (
                       <MinusCircleOutlined
                         onClick={() => {
                           remove(name);
@@ -88,7 +103,7 @@ const PropComponent: FC<QuestionCheckboxProps> = (props: QuestionCheckboxProps) 
                   type="link"
                   onClick={() => {
                     const newValue = nanoid(5);
-                    add({ text: '', value: newValue });
+                    add({ text: '默认选项', value: newValue });
                     setTimeout(() => {
                       handleValueChange();
                     }, 0);
@@ -103,7 +118,7 @@ const PropComponent: FC<QuestionCheckboxProps> = (props: QuestionCheckboxProps) 
           )}
         </Form.List>
       </Form.Item>
-      <Form.Item name="isVertical" valuePropName="checked">
+      <Form.Item label="是否竖向排列" name="isVertical" valuePropName="checked">
         <Checkbox>竖向排列</Checkbox>
       </Form.Item>
     </Form>

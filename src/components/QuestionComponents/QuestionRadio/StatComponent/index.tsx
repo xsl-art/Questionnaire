@@ -1,33 +1,70 @@
 import { useMemo, type FC } from 'react';
-const STAT_COLORS = ['#FF2D2D', '#BE77FF', '#2894FF', '#00EC00', '#EAC100', '#FF9D6F'];
 import { type QuestionRadioStatisticsProps } from '../types';
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
-function format(num: number) {
-  return (num * 100).toFixed(2);
+// 更柔和的统计色板
+const STAT_COLORS = [
+  '#1677ff',
+  '#52c41a',
+  '#faad14',
+  '#f5222d',
+  '#722ed1',
+  '#13c2c2',
+  '#eb2f96',
+  '#fa8c16',
+];
+
+function formatPercent(num: number) {
+  return `${(num * 100).toFixed(2)}%`;
 }
 
-const ChartComponent: FC<QuestionRadioStatisticsProps> = ({ stat }) => {
+function getOptionText(value: string, options?: Array<{ value: string; text: string }>) {
+  return options?.find(opt => opt.value === value)?.text ?? value;
+}
+
+const ChartComponent: FC<QuestionRadioStatisticsProps> = ({ stat, options }) => {
   const sum = useMemo(() => stat.reduce((pre, cur) => pre + cur.count, 0), [stat]);
 
+  // 把 value 映射成选项 text，方便阅读
+  const chartData = useMemo(
+    () =>
+      stat.map(item => ({
+        ...item,
+        name: getOptionText(item.name, options),
+      })),
+    [stat, options]
+  );
+
   return (
-    <div style={{ width: '300px', height: '400px' }}>
+    <div style={{ width: '100%', height: 360 }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             dataKey="count"
-            data={stat}
-            cx="50%" // x 轴的偏移
-            cy="50%" // y 轴的偏移
-            outerRadius={50} // 饼图的直径
-            fill="#8884d8"
-            label={(i: any) => `${i.name}: ${format(i.count / sum)}%`}
+            nameKey="name"
+            data={chartData}
+            cx="40%"
+            cy="50%"
+            outerRadius={90}
+            innerRadius={40}
+            label={entry => `${entry.name}: ${entry.count} (${formatPercent(entry.count / sum)})`}
           >
-            {stat.map((_i, index) => {
-              return <Cell key={index} fill={STAT_COLORS[index]} />;
+            {chartData.map((_i, index) => {
+              return <Cell key={index} fill={STAT_COLORS[index % STAT_COLORS.length]} />;
             })}
           </Pie>
-          <Tooltip />
+          <Tooltip
+            formatter={(value: number, name: string) => [
+              `${value} (${formatPercent(value / sum)})`,
+              name,
+            ]}
+          />
+          <Legend
+            verticalAlign="middle"
+            align="right"
+            layout="vertical"
+            wrapperStyle={{ paddingLeft: 16 }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

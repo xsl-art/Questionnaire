@@ -3,23 +3,22 @@ import type { ConditionGroup } from '@/components/QuestionComponents/type';
 
 export type CircularCheckResult = {
   hasCycle: boolean;
-  cycle?: string[];
+  cycle?: string[]; //组件Id列表环
 };
 
 /**
- * 检测条件显示是否存在循环引用
- * @param componentList 组件列表
- * @returns 是否存在环，若存在返回环上的组件 fe_id 列表
+ * 从组件列表构建邻接表（只构建一次，缓存使用）
+ * 被控制组件 -> 触发源组件[]
  */
-export const checkCircularCondition = (componentList: ComponentInfoType[]): CircularCheckResult => {
+export const buildAdjacency = (componentList: ComponentInfoType[]): Record<string, string[]> => {
+  //邻接表对象
   const adjacency: Record<string, string[]> = {};
   const componentIds = new Set(componentList.map(item => item.fe_id));
 
-  // 构建有向图：被控制组件 -> 触发源组件
   componentList.forEach(comp => {
     adjacency[comp.fe_id] = [];
     const condition = comp.visibleCondition;
-    if (condition?.rules?.length) {
+    if (condition?.rules.length) {
       condition.rules.forEach(rule => {
         if (rule.sourceId && componentIds.has(rule.sourceId)) {
           adjacency[comp.fe_id].push(rule.sourceId);
@@ -27,26 +26,52 @@ export const checkCircularCondition = (componentList: ComponentInfoType[]): Circ
       });
     }
   });
+  return adjacency;
+};
 
+/**
+ * 全量检测初始化
+ */
+export const checkCircularCondition = (componentList: ComponentInfoType[]): CircularCheckResult => {
+  const adjacency = buildAdjacency(componentList);
+  return checkCircularWithAdjacency(adjacency);
+};
+
+/**
+ * 基于邻接表的环检测
+ * @param adjacency 邻接表
+ * @param startNodes 起始节点，用于增量检测
+ */
+
+export const checkCircularWithAdjacency = (
+  adjacency: Record<string, string[]>,
+  startNodes?: string[]
+): CircularCheckResult => {
   const colors: Record<string, 'white' | 'gray' | 'black'> = {};
-  componentList.forEach(comp => {
-    colors[comp.fe_id] = 'white';
+  const nodes = Object.keys(adjacency);
+
+  nodes.forEach(node => {
+    colors[node] = 'white';
   });
 
+  //访问路径
   const path: string[] = [];
 
-  const dfs = (node: string): string[] | null => {
+  const defs = (node: string): string[] | null => {
+    //标记为访问
     colors[node] = 'gray';
     path.push(node);
 
     for (const neighbor of adjacency[node] || []) {
       if (colors[neighbor] === 'gray') {
-        // 找到环，截取环部分
+        //出现环
         const cycleStart = path.indexOf(neighbor);
+        //返回完整的循环路径
         return [...path.slice(cycleStart), neighbor];
       }
+
       if (colors[neighbor] === 'white') {
-        const cycle = dfs(neighbor);
+        const cycle = defs(neighbor);
         if (cycle) return cycle;
       }
     }
@@ -56,32 +81,50 @@ export const checkCircularCondition = (componentList: ComponentInfoType[]): Circ
     return null;
   };
 
-  for (const comp of componentList) {
-    if (colors[comp.fe_id] === 'white') {
-      const cycle = dfs(comp.fe_id);
-      if (cycle) {
-        return { hasCycle: true, cycle };
-      }
+  const targets = startNodes || nodes;
+
+  for (const node of targets) {
+    if (colors[node] === 'white') {
+      const cycle = defs(node);
+      if (cycle) return { hasCycle: true, cycle };
     }
   }
-
   return { hasCycle: false };
 };
 
 /**
- * 检测单个条件组是否会与现有组件列表形成循环引用
- * @param componentList 现有组件列表
- * @param targetFeId 被设置条件的组件 id
- * @param condition 新的条件组
+ * 增量检测
+ * 检测单个条件是否会形成循环引用
+ * 复用已有邻接表，只修改目标节点的边
+ * 只从目标节点dfs
+ * 如果目标节点没有出边，无环
  */
+
 export const checkCircularConditionForGroup = (
   componentList: ComponentInfoType[],
   targetFeId: string,
-  condition: ConditionGroup | null
+  condition: ConditionGroup | null,
+  cacheAdjacency?: Record<string, string[]>
 ): CircularCheckResult => {
-  // 构造临时组件列表，将目标组件的条件替换为新条件
-  const tempList = componentList.map(comp =>
-    comp.fe_id === targetFeId ? { ...comp, visibleCondition: condition } : comp
-  );
-  return checkCircularCondition(tempList);
+  const adjacency = cacheAdjacency || buildAdjacency(componentList);
+
+  const newTargets: string[] = [];
+  if (condition?.rules?.length) {
+    const componentIds = new Set(componentList.map(item => item.fe_id));
+    condition.rules.forEach(rule => {
+      if (rule.sourceId && componentIds.has(rule.sourceId) && rule.sourceId !== targetFeId) {
+        newTargets.push(rule.sourceId);
+      }
+    });
+  }
+
+  //更新邻接表
+  const updateAdjacency = { ...adjacency };
+  updateAdjacency[targetFeId] = newTargets;
+
+  if (newTargets.length === 0) {
+    return { hasCycle: false };
+  }
+
+  return checkCircularWithAdjacency(updateAdjacency, [targetFeId]);
 };

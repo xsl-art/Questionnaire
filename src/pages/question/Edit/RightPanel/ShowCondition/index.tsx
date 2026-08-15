@@ -38,6 +38,7 @@ const createEmptyRule = (): ConditionRule => ({
 const ShowCondition: FC = () => {
   const dispatch = useDispatch();
   const { selectedId, selectedComponent, componentList } = useComponentInfo();
+  const { adjacencyCache } = useComponentInfo();
 
   // 本地状态管理条件组，组件因 key 变化重新挂载时从当前选中组件初始化
   const [conditionGroup, setConditionGroup] = useState<ConditionGroup>(
@@ -93,10 +94,17 @@ const ShowCondition: FC = () => {
       validRules.length > 0 ? { ...conditionGroup, rules: validRules } : null;
 
     // 循环引用检测
-    const cycleResult = checkCircularConditionForGroup(componentList, selectedId, finalGroup);
+    const cycleResult = checkCircularConditionForGroup(
+      componentList,
+      selectedId,
+      finalGroup,
+      adjacencyCache
+    );
     if (cycleResult.hasCycle) {
-      message.error(`保存失败：条件显示存在循环引用（${cycleResult.cycle?.join(' → ')}），请检查`);
+      message.error(`保存失败：条件显示存在循环引用（${cycleResult.cycle?.join(' → ')}）`);
       return;
+    } else {
+      message.success('保存成功');
     }
 
     dispatch(
@@ -153,7 +161,7 @@ const ShowCondition: FC = () => {
   );
 };
 
-// ==================== 单条规则组件 ====================
+//单条规则组件
 
 type RuleItemProps = {
   rule: ConditionRule;
@@ -271,7 +279,7 @@ const RuleItem: FC<RuleItemProps> = ({ rule, index, triggerOptions, onChange, on
   );
 };
 
-// ==================== 目标值输入组件（根据字段类型动态渲染） ====================
+//目标值输入组件（根据字段类型动态渲染）
 
 type TargetValueInputProps = {
   fieldType: string;

@@ -1,4 +1,4 @@
-import { type FC, type JSX } from 'react';
+import { type FC } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -11,7 +11,7 @@ import {
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 type PropsType = {
-  children?: JSX.Element | JSX.Element[];
+  children?: React.ReactNode;
   items: Array<{ id: string; [key: string]: any }>;
   onDragEnd: (oldIndex: number, newIndex: number) => void;
 };

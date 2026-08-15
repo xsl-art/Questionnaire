@@ -74,6 +74,7 @@ export const uploadImageService = async (
   const blob = compress ? await compressImage(file, compressOptions) : file;
 
   const formData = new FormData();
+  //表单名称 表单值 上传文件名
   formData.append('file', blob, file.name);
 
   const data = (await httpInstance.post('/api/upload/image', formData)) as ResDataType;

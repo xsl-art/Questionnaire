@@ -15,13 +15,7 @@ export const MainLayoutWrapper = styled.div`
 
   .content {
     width: 100%;
-    min-height: calc(100vh - 120px);
-    background-color: #ddeb60;
-  }
-
-  .footer {
-    width: 100%;
-    height: 60px;
-    background-color: #8be47d;
+    min-height: calc(100vh - 60px);
+    background-color: #b0ec97;
   }
 `;

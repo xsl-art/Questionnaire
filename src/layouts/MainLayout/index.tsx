@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 import { MainLayoutWrapper } from './style';
 import Logo from '../../components/Logo/index';
 import UserInfo from '@/components/UserInfo';
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 const MainLayout: FC = () => {
   return (
     <MainLayoutWrapper>
@@ -15,7 +15,6 @@ const MainLayout: FC = () => {
       <Content className="content">
         <Outlet />
       </Content>
-      <Footer className="footer">底部</Footer>
     </MainLayoutWrapper>
   );
 };

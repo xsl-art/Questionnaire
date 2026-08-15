@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ListWrapper = styled.div`
-  background-color: #e6d9d9;
+  background-color: #e7dfdf;
   padding: 10px;
   .top {
     width: 100%;
@@ -11,12 +11,16 @@ export const ListWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
 
   .main {
     position: relative;
     width: 100%;
-    height: calc(100vh - 100px);
     box-sizing: border-box;
     border-bottom: 1px solid #ccc;
     margin-bottom: 20px;
@@ -26,7 +30,7 @@ export const ListWrapper = styled.div`
   .footer {
     display: flex;
     width: 100%;
-    height: 50px;
+    height: 20px;
     line-height: 50px;
     justify-content: center;
     align-items: center;

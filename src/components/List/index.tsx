@@ -21,7 +21,7 @@ const List: FC<ListComponentProps> = ({ list, option }) => {
   return (
     <ListWrapper>
       <div className="top">
-        <div className="title">标题</div>
+        <div className="title">问卷列表</div>
         <div className="search">
           <SearchArea />
         </div>

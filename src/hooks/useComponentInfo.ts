@@ -5,7 +5,7 @@ export const useComponentInfo = () => {
   const components = useSelector(
     (state: StateType) => state.components.present
   ) as ComponentsStateType;
-  const { componentList = [], selectedId, copiedComponent } = components;
+  const { componentList = [], selectedId, copiedComponent, adjacencyCache } = components;
   const selectedComponent = componentList.find(item => item.fe_id === selectedId);
-  return { componentList, selectedId, selectedComponent, copiedComponent };
+  return { componentList, selectedId, selectedComponent, copiedComponent, adjacencyCache };
 };

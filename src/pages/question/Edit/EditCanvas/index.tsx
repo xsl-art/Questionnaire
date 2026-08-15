@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useMemo, type FC } from 'react';
 import { EditCanvasWrapper } from './style';
 import classnames from 'classnames';
 import { Spin, Typography } from 'antd';
@@ -40,6 +40,7 @@ const computePreviewVisibility = (
   componentList: ComponentInfoType[],
   mockAnswers: Record<string, unknown>
 ): Record<string, boolean> => {
+  //获取所有组件的属性值
   const componentValues: Record<string, Record<string, unknown>> = {};
   componentList.forEach(comp => {
     const extracted = extractComponentValue(comp);
@@ -50,6 +51,7 @@ const computePreviewVisibility = (
     };
   });
 
+  //计算每个组件的显示状态
   const visibility: Record<string, boolean> = {};
   componentList.forEach(comp => {
     if (comp.isHidden) {
@@ -72,14 +74,17 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
   // 预览模式下按条件计算显隐；编辑模式始终显示所有组件
   const visibility = isPreviewMode ? computePreviewVisibility(componentList, mockAnswers) : null;
 
-  const visibleComponentList = isPreviewMode
-    ? componentList.filter(item => !item.isHidden && visibility?.[item.fe_id])
-    : componentList;
-
-  // 预览模式下被隐藏但仍可查看的组件（半透明占位）
-  const hiddenComponentList = isPreviewMode
-    ? componentList.filter(item => item.isHidden || !visibility?.[item.fe_id])
-    : [];
+  //计算可视组件和不可视组件
+  const [visibleComponentList, hiddenComponentList] = useMemo(() => {
+    if (!isPreviewMode) return [componentList, []];
+    const visible: ComponentInfoType[] = [];
+    const hidden: ComponentInfoType[] = [];
+    componentList.forEach(comp => {
+      const isVisible = !comp.isHidden && visibility?.[comp.fe_id];
+      (isVisible ? visible : hidden).push(comp);
+    });
+    return [visible, hidden];
+  }, [isPreviewMode, componentList, visibility]);
 
   //组件选中状态
   const handleSelect = (e: React.MouseEvent, id: string) => {

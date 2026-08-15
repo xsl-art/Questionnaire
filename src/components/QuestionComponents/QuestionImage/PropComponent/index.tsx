@@ -3,7 +3,6 @@ import { Form, Input, Upload, Button, Space, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import type { QuestionImageProps } from '../types';
 import { uploadImageService } from '@/api/upload';
-import { PropComponentWrapper } from './style';
 
 const OBJECT_FIT_OPTIONS = [
   { value: 'contain', label: 'contain（完整显示）' },
@@ -39,7 +38,7 @@ const PropComponent: FC<QuestionImageProps> = (props: QuestionImageProps) => {
   };
 
   return (
-    <PropComponentWrapper>
+    <>
       <Form
         form={form}
         layout="vertical"
@@ -79,7 +78,7 @@ const PropComponent: FC<QuestionImageProps> = (props: QuestionImageProps) => {
           <Select placeholder="请选择填充方式" options={OBJECT_FIT_OPTIONS} />
         </Form.Item>
       </Form>
-    </PropComponentWrapper>
+    </>
   );
 };
 

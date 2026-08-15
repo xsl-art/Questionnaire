@@ -66,7 +66,7 @@ const StatisticsHeader: FC = () => {
       </div>
       <div className="center">{LinkAndQRCodeElement}</div>
       <div className="right">
-        <Button type="primary" onClick={() => navigate(`/manage/question/${id}`)}>
+        <Button type="primary" onClick={() => navigate(`/question/edit/${id}`)}>
           编辑问卷
         </Button>
       </div>

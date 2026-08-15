@@ -4,7 +4,7 @@ import type { ComponentPropsType, ConditionGroup } from '@/components/QuestionCo
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 import { arrayMove } from '@dnd-kit/sortable';
-import { checkCircularConditionForGroup } from '@/utils/circularConditionCheck';
+import { buildAdjacency, checkCircularConditionForGroup } from '@/utils/circularConditionCheck';
 
 export type ComponentInfoType = {
   fe_id: string;
@@ -20,6 +20,7 @@ export type ComponentsStateType = {
   selectedId: string;
   componentList: ComponentInfoType[];
   copiedComponent: ComponentInfoType | null;
+  adjacencyCache?: Record<string, string[]>;
 };
 
 const INIT_STATE: ComponentsStateType = {
@@ -27,6 +28,7 @@ const INIT_STATE: ComponentsStateType = {
   componentList: [],
   //其他
   copiedComponent: null,
+  adjacencyCache: {},
 };
 
 const getNextSelectedId = (fe_id: string, componentList: ComponentInfoType[]) => {
@@ -48,6 +50,11 @@ const insertNewComponent = (state: ComponentsStateType, newComponent: ComponentI
     state.componentList.splice(index + 1, 0, newComponent);
   }
   state.selectedId = newComponent.fe_id;
+  state.adjacencyCache = rebuildAdjacency(state.componentList);
+};
+
+const rebuildAdjacency = (componentList: ComponentInfoType[]) => {
+  return buildAdjacency(componentList);
 };
 
 export const componentsSlice = createSlice({
@@ -56,7 +63,9 @@ export const componentsSlice = createSlice({
   reducers: {
     //重置所有组件
     resetComponents: (_state: ComponentsStateType, action: PayloadAction<ComponentsStateType>) => {
-      return action.payload;
+      const newState = action.payload;
+      newState.adjacencyCache = rebuildAdjacency(newState.componentList);
+      return newState;
     },
     //设置选中的组件id
     changeSelectedId: (state: ComponentsStateType, action: PayloadAction<string>) => {
@@ -86,6 +95,7 @@ export const componentsSlice = createSlice({
           state.componentList[index] = { ...currentComponent };
         }
       }
+      state.adjacencyCache = rebuildAdjacency(state.componentList);
     },
     //删除选中组件
     deleteSelectedComponent: (state: ComponentsStateType) => {
@@ -95,6 +105,7 @@ export const componentsSlice = createSlice({
       const index = componentList.findIndex(item => item.fe_id === selectedId);
       if (index < 0) return;
       componentList.splice(index, 1);
+      state.adjacencyCache = rebuildAdjacency(state.componentList);
     },
     //显示/隐藏选中组件
     hideSelectedComponent: (
@@ -136,7 +147,6 @@ export const componentsSlice = createSlice({
       const selectedIdComponent = componentList.find(item => item.fe_id === selectedId);
       if (selectedIdComponent == null) return;
       state.copiedComponent = cloneDeep(selectedIdComponent);
-      //console.log('复制组件', state.copiedComponent);
     },
     //粘贴选中组件
     pasteSelectedComponent: (state: ComponentsStateType) => {
@@ -199,12 +209,18 @@ export const componentsSlice = createSlice({
     ) => {
       const { fe_id, visibleCondition } = action.payload;
       // 防御性循环引用检测：若会形成环则不更新
-      const result = checkCircularConditionForGroup(state.componentList, fe_id, visibleCondition);
+      const result = checkCircularConditionForGroup(
+        state.componentList,
+        fe_id,
+        visibleCondition,
+        state.adjacencyCache
+      );
       if (result.hasCycle) return;
 
       const currentComponent = state.componentList.find(item => item.fe_id === fe_id);
       if (currentComponent) {
         currentComponent.visibleCondition = visibleCondition;
+        state.adjacencyCache = rebuildAdjacency(state.componentList);
       }
     },
   },

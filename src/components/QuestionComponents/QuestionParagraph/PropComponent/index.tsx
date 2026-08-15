@@ -1,6 +1,5 @@
 import { useEffect, type FC } from 'react';
 import type { QuestionParagraphProps } from '../types';
-import { PropComponentWrapper } from './style';
 import { Input, Form, Checkbox } from 'antd';
 
 const { TextArea } = Input;
@@ -18,7 +17,7 @@ const PropComponent: FC = (props: QuestionParagraphProps) => {
   };
 
   return (
-    <PropComponentWrapper>
+    <>
       <Form
         form={form}
         layout="vertical"
@@ -37,7 +36,7 @@ const PropComponent: FC = (props: QuestionParagraphProps) => {
           <Checkbox>居中显示</Checkbox>
         </Form.Item>
       </Form>
-    </PropComponentWrapper>
+    </>
   );
 };
 

@@ -7,6 +7,7 @@ import {
   DeleteOutlined,
   DownOutlined,
   EditOutlined,
+  EyeInvisibleFilled,
   EyeInvisibleOutlined,
   EyeOutlined,
   LeftCircleOutlined,
@@ -220,7 +221,7 @@ const EditHeader: FC = () => {
           <Tooltip title="隐藏">
             <Button
               shape="circle"
-              icon={<EyeInvisibleOutlined />}
+              icon={<EyeInvisibleFilled />}
               onClick={() => handleHide()}
             ></Button>
           </Tooltip>

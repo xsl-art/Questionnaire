@@ -1,11 +1,18 @@
+// d:\frontend develop\question\low-code\src\pages\Question\Edit\style.ts
+
 import styled from 'styled-components';
 
 export const EditWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
   .header {
     width: 100%;
     height: 50px;
+    flex-shrink: 0;
     background-color: #e09999;
   }
 
@@ -14,29 +21,33 @@ export const EditWrapper = styled.div`
     flex: 1;
     display: flex;
     justify-content: space-between;
-    min-height: calc(100vh - 50px);
     background-color: #e6d4d4;
     box-sizing: border-box;
     padding: 10px 20px;
+    overflow: hidden;
 
     .left {
       width: 20%;
       height: 100%;
       background-color: #fff;
+      overflow-y: auto;
     }
 
     .center {
       flex: 1;
       display: flex;
       justify-content: center;
+      height: 100%;
+      overflow: hidden;
 
       .canvas-area {
         width: 60%;
-        height: 90%;
+        height: 100%;
         background-color: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         display: flex;
         justify-content: center;
+        overflow: hidden;
       }
 
       .canvas-wrapper {
@@ -55,6 +66,7 @@ export const EditWrapper = styled.div`
       width: 20%;
       height: 100%;
       background-color: #fff;
+      overflow-y: auto;
     }
   }
 `;

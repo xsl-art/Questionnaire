@@ -5,12 +5,13 @@ export const ComponentLibWrapper = styled.div`
     margin-bottom: 12px;
     cursor: pointer;
     background-color: #fff;
-    border: 1px solid #fff;
+    border: 1px solid #d3c3c3;
     padding: 12px;
     border-radius: 3px;
 
     &:hover {
-      border-color: #d9d9d9;
+      transition: all 0.3s linear;
+      border-color: #4cb3df;
     }
   }
 

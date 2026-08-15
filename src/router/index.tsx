@@ -12,8 +12,8 @@ import ManageLayout from '../layouts/ManageLayout/index';
 import QuestionLayout from '../layouts/QuestionLayout/index';
 import { lazy } from 'react';
 
-const Edit = lazy(() => import('../pages/question/Edit/index'));
-const Statistics = lazy(() => import('../pages/question/Statistics/index'));
+const Edit = lazy(() => import('../pages/Question/Edit/index'));
+const Statistics = lazy(() => import('../pages/Question/Statistics/index'));
 
 const router = createBrowserRouter([
   {
