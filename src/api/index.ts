@@ -1,4 +1,5 @@
 import httpInstance, { type ResDataType } from '../service/index';
+import type { ConditionGroup } from '@/components/QuestionComponents/type';
 
 type SearchOption = {
   keyword?: string;
@@ -57,6 +58,17 @@ export const copyQuestionService = async (id: string): Promise<ResDataType> => {
 export const deleteQuestionService = async (ids: string[]): Promise<ResDataType> => {
   const url = '/api/question';
   const data = (await httpInstance.delete(url, { data: { ids } })) as ResDataType;
+  return data;
+};
+
+//增量更新单个组件的可见条件
+export const updateVisibleConditionService = async (
+  id: string,
+  fe_id: string,
+  visibleCondition: ConditionGroup | null
+): Promise<ResDataType> => {
+  const url = `/api/question/${id}/visible-condition/${fe_id}`;
+  const data = (await httpInstance.patch(url, { visibleCondition })) as ResDataType;
   return data;
 };
 

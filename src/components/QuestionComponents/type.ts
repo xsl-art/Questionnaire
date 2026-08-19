@@ -3,23 +3,25 @@ import type { QuestionInputProps } from './QuestionInput/types';
 import type { QuestionParagraphProps } from './QuestionParagraph/types';
 import type { QuestionInfoProps } from './QuestionInfo/types';
 import type { QuestionTextareaProps } from './QuestionTextarea/types';
-import type { QuestionRadioProps, QuestionRadioStatisticsProps } from './QuestionRadio/types';
 import type {
   QuestionCheckboxProps,
   QuestionCheckboxStatisticsProps,
 } from './QuestionCheckbox/types';
+/* import type {
+  QuestionRadioProps,
+  QuestionRadioStatisticsProps,
+} from './QuestionRadio/types'; */
 import type { QuestionImageProps } from './QuestionImage/types';
-import type { QuestionVideoProps } from './QuestionVideo/types';
 import type { QuestionImageUploadProps } from './QuestionImageUpload/types';
-import questionInputConfig from './QuestionInput';
-import questionTitleConfig from './QuestionTitle';
+import QuestionInputConfig from './QuestionInput';
+import QuestionTitleConfig from './QuestionTitle';
 import QuestionParagraphConfig from './QuestionParagraph';
 import QuestionInfoConfig from './QuestionInfo';
 import QuestionTextareaConfig from './QuestionTextarea';
-import QuestionRadioConfig from './QuestionRadio';
+
 import QuestionCheckboxConfig from './QuestionCheckbox';
+//import QuestionRadioConfig from './QuestionRadio';
 import QuestionImageConfig from './QuestionImage';
-import QuestionVideoConfig from './QuestionVideo';
 import QuestionImageUploadConfig from './QuestionImageUpload';
 import type { FC } from 'react';
 
@@ -29,14 +31,13 @@ export type ComponentPropsType = QuestionTitleProps &
   QuestionParagraphProps &
   QuestionInfoProps &
   QuestionTextareaProps &
-  QuestionRadioProps &
   QuestionCheckboxProps &
+  //QuestionRadioProps &
   QuestionImageProps &
-  QuestionVideoProps &
   QuestionImageUploadProps;
 
 //统一组件的prop type
-type ComponentStatisticsPropsType = QuestionRadioStatisticsProps & QuestionCheckboxStatisticsProps;
+type ComponentStatisticsPropsType = QuestionCheckboxStatisticsProps; //& QuestionRadioStatisticsProps;
 
 //统一组件配置
 export interface QuestionComponentConfig<T = any> {
@@ -79,15 +80,14 @@ export type ConditionGroup = {
 
 //全部组件配置的列表
 const questionComponentConfigList: QuestionComponentConfig[] = [
-  questionTitleConfig,
-  questionInputConfig,
+  QuestionTitleConfig,
+  QuestionInputConfig,
   QuestionParagraphConfig,
   QuestionInfoConfig,
   QuestionTextareaConfig,
-  QuestionRadioConfig,
+
   QuestionCheckboxConfig,
   QuestionImageConfig,
-  QuestionVideoConfig,
   QuestionImageUploadConfig,
 ];
 
@@ -96,22 +96,22 @@ export const questionComponentGroupList = [
   {
     groupId: 'display',
     groupName: '文本显示',
-    components: [questionTitleConfig, QuestionParagraphConfig, QuestionInfoConfig],
+    components: [QuestionTitleConfig, QuestionParagraphConfig, QuestionInfoConfig],
   },
   {
     groupId: 'input',
     groupName: '用户输入',
-    components: [questionInputConfig, QuestionTextareaConfig],
+    components: [QuestionInputConfig, QuestionTextareaConfig],
   },
   {
     groupId: 'select',
     groupName: '用户选择',
-    components: [QuestionRadioConfig, QuestionCheckboxConfig],
+    components: [QuestionCheckboxConfig],
   },
   {
     groupId: 'media',
-    groupName: '富媒体',
-    components: [QuestionImageConfig, QuestionVideoConfig, QuestionImageUploadConfig],
+    groupName: '上传图片',
+    components: [QuestionImageConfig, QuestionImageUploadConfig],
   },
 ];
 

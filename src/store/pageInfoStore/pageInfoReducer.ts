@@ -27,8 +27,13 @@ export const pageInfoSlice = createSlice({
     updateTitle: (state: PageInfoType, action: PayloadAction<string>) => {
       state.title = action.payload;
     },
+    //保存用户自定义css
+    saveCustomCss: (state: PageInfoType, action: PayloadAction<string>) => {
+      state.css = action.payload;
+      //console.log('用户css', state.css);
+    },
   },
 });
 
-export const { resetPageInfo, updateTitle } = pageInfoSlice.actions;
+export const { resetPageInfo, updateTitle, saveCustomCss } = pageInfoSlice.actions;
 export default pageInfoSlice.reducer;

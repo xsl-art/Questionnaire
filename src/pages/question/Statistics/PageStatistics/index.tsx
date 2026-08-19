@@ -12,7 +12,6 @@ const { Title } = Typography;
 const ANSWER_COMPONENT_TYPES = [
   'questionInput',
   'questionTextarea',
-  'questionRadio',
   'questionCheckbox',
   'questionImageUpload',
 ];
@@ -133,11 +132,6 @@ const PageStatistics: FC<PropsType> = (props: PropsType) => {
 function renderCellValue(value: unknown, type: string, props: Record<string, any>) {
   if (value == null || value === '') {
     return <span style={{ color: '#bfbfbf' }}>-</span>;
-  }
-
-  if (type === 'questionRadio') {
-    const text = getOptionText(String(value), props.options);
-    return <span>{text}</span>;
   }
 
   if (type === 'questionCheckbox') {

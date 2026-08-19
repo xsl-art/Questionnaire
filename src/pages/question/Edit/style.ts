@@ -27,7 +27,7 @@ export const EditWrapper = styled.div`
     overflow: hidden;
 
     .left {
-      width: 20%;
+      width: 24%;
       height: 100%;
       background-color: #fff;
       overflow-y: auto;
@@ -63,7 +63,7 @@ export const EditWrapper = styled.div`
     }
 
     .right {
-      width: 20%;
+      width: 24%;
       height: 100%;
       background-color: #fff;
       overflow-y: auto;

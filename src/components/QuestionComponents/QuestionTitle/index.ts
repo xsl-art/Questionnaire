@@ -10,7 +10,7 @@ import type { QuestionComponentConfig } from '../type';
 export * from './types';
 
 //组件配置
-const questionTitleConfig: QuestionComponentConfig = {
+const QuestionTitleConfig: QuestionComponentConfig = {
   title: '标题',
   type: 'questionTitle',
   Component, //画布展示的组件
@@ -18,4 +18,4 @@ const questionTitleConfig: QuestionComponentConfig = {
   defaultProps: defaultQuestionTitleProps,
 };
 
-export default questionTitleConfig;
+export default QuestionTitleConfig;

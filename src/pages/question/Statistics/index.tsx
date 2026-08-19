@@ -9,11 +9,16 @@ import StatisticsHeader from './StatisticsHeader';
 import ComponentList from './ComponentList';
 import PageStatistics from './PageStatistics';
 import ChartStatistics from './ChartStatistics';
+import { useCustomStyle } from '@/hooks/useSyncCustomStyle';
+import { STAT_SCOPE_ID } from '@/constants';
 
 const Stat: FC = () => {
   const { loading } = useLoadQuestionData();
-  const { title, isPublished } = usePageInfo();
+  const { title, isPublished, css } = usePageInfo();
+  const { injectCustomCss } = useCustomStyle();
   const nav = useNavigate();
+
+  injectCustomCss(css, STAT_SCOPE_ID);
 
   const [selectedComponentId, setSelectedComponentId] = useState('');
   const [selectedComponentType, setSelectedComponentType] = useState('');
@@ -71,7 +76,7 @@ const Stat: FC = () => {
   }
 
   return (
-    <StatWrapper>
+    <StatWrapper id={STAT_SCOPE_ID}>
       <StatisticsHeader />
       <div className="content-wrapper">
         {loading && LoadingELement}

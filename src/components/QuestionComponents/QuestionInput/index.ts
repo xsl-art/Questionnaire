@@ -9,7 +9,7 @@ import type { QuestionComponentConfig } from '../type';
 
 export * from './types';
 
-const questionInputConfig: QuestionComponentConfig = {
+const QuestionInputConfig: QuestionComponentConfig = {
   title: '输入框',
   type: 'questionInput',
   Component, //画布展示的组件
@@ -17,4 +17,4 @@ const questionInputConfig: QuestionComponentConfig = {
   defaultProps: defaultQuestionInputProps,
 };
 
-export default questionInputConfig;
+export default QuestionInputConfig;

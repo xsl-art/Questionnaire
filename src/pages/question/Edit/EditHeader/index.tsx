@@ -77,24 +77,34 @@ const SaveButton: FC = () => {
   const { id } = useParams();
 
   const { loading, run: save } = useRequest(
-    async () => {
+    async (isAutoSave: boolean = false) => {
       if (!id) return;
       await updateQuestionService(id, { ...pageInfo, componentList });
+      return isAutoSave;
     },
-    { manual: true }
+    {
+      manual: true,
+      onSuccess: isAutoSave => {
+        if (isAutoSave) return;
+        message.success('保存成功');
+      },
+      onError: () => {
+        message.error('保存失败');
+      },
+    }
   );
 
   //快捷键
   useKeyPress(['ctrl.s', 'meta.s'], (event: KeyboardEvent) => {
     event.preventDefault();
     if (loading) return;
-    save();
+    save(false);
   });
 
   //自动保存
   useDebounceEffect(
     () => {
-      save();
+      save(true);
     },
     [componentList, pageInfo],
     { wait: 10000 }
@@ -103,7 +113,7 @@ const SaveButton: FC = () => {
   return (
     <Button
       icon={loading ? <LoadingOutlined /> : <CheckOutlined />}
-      onClick={() => save()}
+      onClick={() => save(false)}
       disabled={loading}
     >
       保存

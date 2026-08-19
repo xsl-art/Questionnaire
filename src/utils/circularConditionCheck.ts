@@ -112,16 +112,18 @@ export const checkCircularConditionForGroup = (
   if (condition?.rules?.length) {
     const componentIds = new Set(componentList.map(item => item.fe_id));
     condition.rules.forEach(rule => {
-      if (rule.sourceId && componentIds.has(rule.sourceId) && rule.sourceId !== targetFeId) {
+      // 保留自环边：组件依赖自己同样属于循环引用
+      if (rule.sourceId && componentIds.has(rule.sourceId)) {
         newTargets.push(rule.sourceId);
       }
     });
   }
 
-  //更新邻接表
+  // 更新邻接表中目标组件的出边
   const updateAdjacency = { ...adjacency };
   updateAdjacency[targetFeId] = newTargets;
 
+  // 空条件直接放行，并从邻接表中清除该节点的出边
   if (newTargets.length === 0) {
     return { hasCycle: false };
   }

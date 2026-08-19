@@ -145,8 +145,6 @@ export const extractComponentValue = (component: {
     case 'questionInput':
     case 'questionTextarea':
       return { value: props.value || '' };
-    case 'questionRadio':
-      return { value: props.value || '' };
     case 'questionCheckbox': {
       const checkedValues =
         props.list

@@ -17,6 +17,9 @@ import { evaluateConditionGroup, extractComponentValue } from '@/utils/condition
 import type { StateType } from '@/store';
 import { setMockAnswer } from '@/store/previewStore/previewReducer';
 import { PreviewContext } from '@/contexts/PreviewContext';
+import { usePageInfo } from '@/hooks/usePageInfo';
+import { useCustomStyle } from '@/hooks/useSyncCustomStyle';
+import { CANVAS_SCOPE_ID } from '@/constants';
 
 const { Text } = Typography;
 
@@ -68,8 +71,13 @@ const computePreviewVisibility = (
 
 const EditCanvas: FC<PropsType> = ({ loading }) => {
   const { componentList, selectedId } = useComponentInfo();
+  const { injectCustomCss } = useCustomStyle();
   const dispatch = useDispatch();
   const { isPreviewMode, mockAnswers } = useSelector((state: StateType) => state.preview);
+  const { css } = usePageInfo();
+
+  //自定义css
+  injectCustomCss(css, CANVAS_SCOPE_ID);
 
   // 预览模式下按条件计算显隐；编辑模式始终显示所有组件
   const visibility = isPreviewMode ? computePreviewVisibility(componentList, mockAnswers) : null;
@@ -123,7 +131,7 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
         setMockAnswer: handleMockAnswerChange,
       }}
     >
-      <EditCanvasWrapper className={isPreviewMode ? 'preview-mode' : ''}>
+      <EditCanvasWrapper id={CANVAS_SCOPE_ID} className={isPreviewMode ? 'preview-mode' : ''}>
         <SortableContainer items={componentListWithId} onDragEnd={handleDragEnd}>
           {visibleComponentList
             .filter(item => !item.isHidden)

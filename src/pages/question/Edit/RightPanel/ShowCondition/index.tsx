@@ -4,6 +4,7 @@ import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useComponentInfo } from '@/hooks/useComponentInfo';
 import { useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
+import { useParams } from 'react-router-dom';
 import {
   componentConditionFields,
   getOperatorsByType,
@@ -16,6 +17,7 @@ import type {
 } from '@/components/QuestionComponents/type';
 import { updateVisibleCondition } from '@/store/componentsStore/componentsReducer';
 import { checkCircularConditionForGroup } from '@/utils/circularConditionCheck';
+import { updateVisibleConditionService } from '@/api';
 
 const { Text } = Typography;
 
@@ -37,8 +39,8 @@ const createEmptyRule = (): ConditionRule => ({
 
 const ShowCondition: FC = () => {
   const dispatch = useDispatch();
-  const { selectedId, selectedComponent, componentList } = useComponentInfo();
-  const { adjacencyCache } = useComponentInfo();
+  const { id } = useParams();
+  const { selectedId, selectedComponent, componentList, adjacencyCache } = useComponentInfo();
 
   // 本地状态管理条件组，组件因 key 变化重新挂载时从当前选中组件初始化
   const [conditionGroup, setConditionGroup] = useState<ConditionGroup>(
@@ -79,8 +81,13 @@ const ShowCondition: FC = () => {
     setConditionGroup(prev => ({ ...prev, logic }));
   };
 
-  // 保存到 Redux
-  const handleSave = () => {
+  // 保存到服务端 + Redux
+  const handleSave = async () => {
+    if (!id) {
+      message.error('问卷 ID 不存在');
+      return;
+    }
+
     // 过滤掉未填写完整的规则
     const validRules = conditionGroup.rules.filter(rule => {
       if (!rule.sourceId || !rule.sourceField || !rule.operator) return false;
@@ -93,7 +100,7 @@ const ShowCondition: FC = () => {
     const finalGroup: ConditionGroup | null =
       validRules.length > 0 ? { ...conditionGroup, rules: validRules } : null;
 
-    // 循环引用检测
+    // 前端本地先做一轮增量循环引用检测
     const cycleResult = checkCircularConditionForGroup(
       componentList,
       selectedId,
@@ -103,16 +110,22 @@ const ShowCondition: FC = () => {
     if (cycleResult.hasCycle) {
       message.error(`保存失败：条件显示存在循环引用（${cycleResult.cycle?.join(' → ')}）`);
       return;
-    } else {
-      message.success('保存成功');
     }
 
-    dispatch(
-      updateVisibleCondition({
-        fe_id: selectedId,
-        visibleCondition: finalGroup,
-      })
-    );
+    try {
+      // 服务端增量循环引用检测并持久化
+      await updateVisibleConditionService(id, selectedId, finalGroup);
+      message.success('保存成功');
+
+      dispatch(
+        updateVisibleCondition({
+          fe_id: selectedId,
+          visibleCondition: finalGroup,
+        })
+      );
+    } catch {
+      // axios 拦截器已弹出 message.error，这里只需阻止本地状态更新
+    }
   };
 
   return (
@@ -297,7 +310,7 @@ const TargetValueInput: FC<TargetValueInputProps> = ({
   disabled,
 }) => {
   // 单选题特殊处理：选项从组件 props 来
-  if (triggerComponent?.type === 'questionRadio' && triggerComponent?.props?.options) {
+  if (triggerComponent?.props?.options) {
     return (
       <Select
         style={{ width: '100%' }}
