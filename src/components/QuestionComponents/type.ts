@@ -7,10 +7,7 @@ import type {
   QuestionCheckboxProps,
   QuestionCheckboxStatisticsProps,
 } from './QuestionCheckbox/types';
-/* import type {
-  QuestionRadioProps,
-  QuestionRadioStatisticsProps,
-} from './QuestionRadio/types'; */
+import type { QuestionRadioProps, QuestionRadioStatisticsProps } from './QuestionRadio/types';
 import type { QuestionImageProps } from './QuestionImage/types';
 import type { QuestionImageUploadProps } from './QuestionImageUpload/types';
 import QuestionInputConfig from './QuestionInput';
@@ -18,9 +15,8 @@ import QuestionTitleConfig from './QuestionTitle';
 import QuestionParagraphConfig from './QuestionParagraph';
 import QuestionInfoConfig from './QuestionInfo';
 import QuestionTextareaConfig from './QuestionTextarea';
-
 import QuestionCheckboxConfig from './QuestionCheckbox';
-//import QuestionRadioConfig from './QuestionRadio';
+import QuestionRadioConfig from './QuestionRadio';
 import QuestionImageConfig from './QuestionImage';
 import QuestionImageUploadConfig from './QuestionImageUpload';
 import type { FC } from 'react';
@@ -32,12 +28,12 @@ export type ComponentPropsType = QuestionTitleProps &
   QuestionInfoProps &
   QuestionTextareaProps &
   QuestionCheckboxProps &
-  //QuestionRadioProps &
+  QuestionRadioProps &
   QuestionImageProps &
   QuestionImageUploadProps;
 
 //统一组件的prop type
-type ComponentStatisticsPropsType = QuestionCheckboxStatisticsProps; //& QuestionRadioStatisticsProps;
+type ComponentStatisticsPropsType = QuestionCheckboxStatisticsProps & QuestionRadioStatisticsProps;
 
 //统一组件配置
 export interface QuestionComponentConfig<T = any> {
@@ -85,7 +81,7 @@ const questionComponentConfigList: QuestionComponentConfig[] = [
   QuestionParagraphConfig,
   QuestionInfoConfig,
   QuestionTextareaConfig,
-
+  QuestionRadioConfig,
   QuestionCheckboxConfig,
   QuestionImageConfig,
   QuestionImageUploadConfig,
@@ -106,7 +102,7 @@ export const questionComponentGroupList = [
   {
     groupId: 'select',
     groupName: '用户选择',
-    components: [QuestionCheckboxConfig],
+    components: [QuestionRadioConfig, QuestionCheckboxConfig],
   },
   {
     groupId: 'media',

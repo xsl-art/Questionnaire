@@ -9,7 +9,7 @@ export type QuestionImageUploadProps = {
 };
 
 export const defaultQuestionImageUploadProps: QuestionImageUploadProps = {
-  title: '图片上传',
+  title: '客户端图片上传',
   maxCount: 5,
 };
 

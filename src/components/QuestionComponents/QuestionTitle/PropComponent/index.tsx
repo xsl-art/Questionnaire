@@ -33,8 +33,7 @@ const PropComponent: FC<QuestionTitleProps> = (props: QuestionTitleProps) => {
               { value: 1, text: '标题等级1' },
               { value: 2, text: '标题等级2' },
               { value: 3, text: '标题等级3' },
-              { value: 4, text: '标题等级4' },
-              { value: 5, text: '标题等级5' },
+              { value: 'default', text: '默认等级' },
             ]}
           ></Select>
         </Form.Item>

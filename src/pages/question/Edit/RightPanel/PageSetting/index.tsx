@@ -5,7 +5,7 @@ import { useComponentInfo } from '@/hooks/useComponentInfo';
 import { Form, Input } from 'antd';
 import { useDispatch } from 'react-redux';
 import { resetPageInfo } from '@/store/pageInfoStore/pageInfoReducer';
-import CodeEditor from '../CodeEditor/idnex';
+import CodeEditor from '../CodeEditor';
 
 const { TextArea } = Input;
 

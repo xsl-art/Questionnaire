@@ -7,12 +7,10 @@ const QuestionTitle: FC<QuestionTitleProps> = (props: QuestionTitleProps) => {
   const { text = '', level = 1, isCenter = false } = { ...defaultQuestionTitleProps, ...props };
 
   const getFontSize = (level: number) => {
-    if (level === 1) return '24px';
-    if (level === 2) return '20px';
-    if (level === 3) return '16px';
-    if (level === 4) return '14px';
-    if (level === 5) return '12px';
-    return '16px';
+    if (level === 1) return '28px';
+    if (level === 2) return '24px';
+    if (level === 3) return '20px';
+    return '20px';
   };
   return (
     <Title

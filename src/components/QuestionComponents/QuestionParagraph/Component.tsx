@@ -8,7 +8,9 @@ const QuestionParagraph: FC = (props: QuestionParagraphProps) => {
   const textList = text.split('\n');
 
   return (
-    <Paragraph style={{ textAlign: isCenter ? 'center' : 'start', marginBottom: '0' }}>
+    <Paragraph
+      style={{ textAlign: isCenter ? 'center' : 'start', marginBottom: '0', textIndent: '2em' }}
+    >
       {textList.map((item, index) => (
         <span key={index}>
           {index > 0 && <br />}
