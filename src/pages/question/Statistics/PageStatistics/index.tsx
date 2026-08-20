@@ -3,7 +3,7 @@ import { PageStatisticsWrapper } from './style';
 import { useRequest } from 'ahooks';
 import { getStatisticsService } from '@/api';
 import { useParams } from 'react-router-dom';
-import { Pagination, Spin, Table, Tag, Typography } from 'antd';
+import { Pagination, Spin, Table, Tag, Typography, Tooltip } from 'antd';
 import { useComponentInfo } from '@/hooks/useComponentInfo';
 
 const { Title } = Typography;
@@ -63,22 +63,33 @@ const PageStatistics: FC<PropsType> = (props: PropsType) => {
     ...answerComponents.map(item => {
       const { fe_id, title, props = {}, type } = item;
       const colTitle = (props as { title?: string }).title || title;
+      // 截断过长的标题，最多显示 8 个字符
+      const shortTitle = colTitle.length > 8 ? colTitle.slice(0, 8) + '...' : colTitle;
 
       return {
         title: (
-          <div
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setSelectedComponentId(fe_id);
-              setSelectedComponentType(type);
-            }}
-          >
-            <span style={{ color: fe_id === selectedComponentId ? '#1890ff' : 'inherit' }}>
-              {colTitle}
-            </span>
-          </div>
+          <Tooltip title={colTitle}>
+            <div
+              style={{
+                cursor: 'pointer',
+                maxWidth: 120,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+              onClick={() => {
+                setSelectedComponentId(fe_id);
+                setSelectedComponentType(type);
+              }}
+            >
+              <span style={{ color: fe_id === selectedComponentId ? '#1890ff' : 'inherit' }}>
+                {shortTitle}
+              </span>
+            </div>
+          </Tooltip>
         ),
         dataIndex: fe_id,
+        width: 140,
         ellipsis: true,
         render: (value: unknown) => renderCellValue(value, type, props as Record<string, any>),
       };
@@ -89,12 +100,15 @@ const PageStatistics: FC<PropsType> = (props: PropsType) => {
 
   const TableElem = (
     <>
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        pagination={false}
-        scroll={{ x: 'max-content' }}
-      />
+      <div style={{ overflowX: 'auto', maxWidth: '100%' }}>
+        <Table
+          columns={columns}
+          dataSource={dataSource}
+          pagination={false}
+          scroll={{ x: columns.length * 140 }}
+          style={{ minWidth: columns.length * 140 }}
+        />
+      </div>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '18px' }}>
         <Pagination
           total={total}

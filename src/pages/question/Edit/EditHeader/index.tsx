@@ -126,8 +126,7 @@ const TitleElement: FC = () => {
   const dispatch = useDispatch();
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value.trim();
-    if (!newTitle) return;
+    const newTitle = e.target.value;
     dispatch(updateTitle(newTitle));
   };
   if (editState) {

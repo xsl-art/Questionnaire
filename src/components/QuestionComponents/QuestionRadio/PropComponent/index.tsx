@@ -1,7 +1,12 @@
 import { useEffect, type FC } from 'react';
 import { type OptionsType, type QuestionRadioProps } from '../types';
 import { Button, Checkbox, Form, Input, Select, Space } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  DownCircleOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  UpCircleOutlined,
+} from '@ant-design/icons';
 
 const PropComponent: FC<QuestionRadioProps> = (props: QuestionRadioProps) => {
   const { title, isVertical, options = [], value, onChange, disabled } = props;
@@ -14,7 +19,6 @@ const PropComponent: FC<QuestionRadioProps> = (props: QuestionRadioProps) => {
   const handleValueChange = () => {
     if (onChange) {
       const values = form.getFieldsValue();
-      // 选项 value 强制跟随 text，避免 B 端自定义校验脚本按显示文本判断时取值不一致
       if (values.options && Array.isArray(values.options)) {
         values.options = values.options.map((option: OptionsType) => ({
           ...option,
@@ -38,7 +42,7 @@ const PropComponent: FC<QuestionRadioProps> = (props: QuestionRadioProps) => {
       </Form.Item>
       <Form.Item label="选项">
         <Form.List name="options">
-          {(fields, { add, remove }) => (
+          {(fields, { add, remove, move }) => (
             <>
               {fields.map((item, index) => {
                 const { key, name } = item;
@@ -68,7 +72,29 @@ const PropComponent: FC<QuestionRadioProps> = (props: QuestionRadioProps) => {
                       <Input />
                     </Form.Item>
 
-                    {index > 1 && (
+                    {index > 0 && (
+                      <UpCircleOutlined
+                        onClick={() => {
+                          move(index, index - 1);
+                          setTimeout(() => {
+                            handleValueChange();
+                          }, 0);
+                        }}
+                      />
+                    )}
+
+                    {index < fields.length - 1 && (
+                      <DownCircleOutlined
+                        onClick={() => {
+                          move(index, index + 1);
+                          setTimeout(() => {
+                            handleValueChange();
+                          }, 0);
+                        }}
+                      />
+                    )}
+
+                    {fields?.length > 1 && (
                       <MinusCircleOutlined
                         onClick={() => {
                           remove(name);
@@ -103,11 +129,11 @@ const PropComponent: FC<QuestionRadioProps> = (props: QuestionRadioProps) => {
       <Form.Item label="默认选中" name="value">
         <Select
           onChange={handleValueChange}
-          options={options.map((opt, index) => ({
+          options={options.map(opt => ({
             value: opt.value,
-            label: opt.text || `选项${index + 1}`,
+            label: opt.text || '',
           }))}
-        ></Select>
+        />
       </Form.Item>
       <Form.Item name="isVertical" valuePropName="checked">
         <Checkbox onChange={handleValueChange}>竖向排列</Checkbox>

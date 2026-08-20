@@ -10,6 +10,7 @@ export const componentConditionFields: Record<
 > = {
   questionInput: [{ field: 'value', label: '输入值', type: 'string' }],
   questionTextarea: [{ field: 'value', label: '文本域值', type: 'string' }],
+  questionRadio: [{ field: 'value', label: '单选值', type: 'string' }],
   questionCheckbox: [{ field: 'value', label: '复选值', type: 'array' }],
 };
 

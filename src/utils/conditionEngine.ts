@@ -47,10 +47,20 @@ export const evaluateCondition = (
   }
 
   switch (operator) {
-    case 'eq':
+    case 'eq': {
+      // targetValue 为数组时：actualValue 在数组中任一即匹配（单选值包含在目标值列表中）
+      if (Array.isArray(targetValue)) {
+        return targetValue.map(String).includes(String(actualValue));
+      }
       return actualValue === targetValue;
-    case 'ne':
+    }
+    case 'ne': {
+      // targetValue 为数组时：actualValue 不在数组中才匹配
+      if (Array.isArray(targetValue)) {
+        return !targetValue.map(String).includes(String(actualValue));
+      }
       return actualValue !== targetValue;
+    }
     case 'gt':
       return Number(actualValue) > Number(targetValue);
     case 'lt':
@@ -60,14 +70,18 @@ export const evaluateCondition = (
     case 'lte':
       return Number(actualValue) <= Number(targetValue);
     case 'contains': {
-      // 字符串包含子串
-      if (typeof actualValue === 'string') {
-        return actualValue.includes(String(targetValue));
-      }
-      // 数组包含目标选项中的任意一个（交集非空）
+      // actualValue 是数组时：检查是否与 targetValue 有交集（多选题包含任一目标选项）
       if (Array.isArray(actualValue)) {
         const targetArray = Array.isArray(targetValue) ? targetValue : [String(targetValue)];
         return intersection(actualValue.map(String), targetArray.map(String)).length > 0;
+      }
+      // targetValue 是数组时：检查单选值是否在目标数组中
+      if (Array.isArray(targetValue)) {
+        return targetValue.map(String).includes(String(actualValue));
+      }
+      // 字符串包含子串
+      if (typeof actualValue === 'string') {
+        return actualValue.includes(String(targetValue));
       }
       return false;
     }

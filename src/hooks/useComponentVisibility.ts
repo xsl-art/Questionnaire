@@ -19,7 +19,6 @@ const useComponentValues = (): Record<string, Record<string, any>> => {
 
     componentList.forEach(comp => {
       // 从组件 props 中提取值
-      // 编辑模式下，单选/多选组件的 value 可能在 props 中
       values[comp.fe_id] = {
         value: comp.props.value,
         // 可以扩展其他字段

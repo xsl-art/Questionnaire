@@ -2,7 +2,6 @@ import { useMemo, type FC } from 'react';
 import { type QuestionRadioStatisticsProps } from '../types';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
-// 更柔和的统计色板
 const STAT_COLORS = [
   '#1677ff',
   '#52c41a',
@@ -47,15 +46,18 @@ const ChartComponent: FC<QuestionRadioStatisticsProps> = ({ stat, options }) => 
             cy="50%"
             outerRadius={90}
             innerRadius={40}
-            label={entry => `${entry.name}: ${entry.count} (${formatPercent(entry.count / sum)})`}
+            label={entry => {
+              const data = entry as unknown as { name: string; count: number };
+              return `${data.name}: ${data.count} (${formatPercent(data.count / sum)})`;
+            }}
           >
             {chartData.map((_i, index) => {
               return <Cell key={index} fill={STAT_COLORS[index % STAT_COLORS.length]} />;
             })}
           </Pie>
           <Tooltip
-            formatter={(value: number, name: string) => [
-              `${value} (${formatPercent(value / sum)})`,
+            formatter={(value, name) => [
+              `${value ?? 0} (${formatPercent(((value as number) ?? 0) / sum)})`,
               name,
             ]}
           />

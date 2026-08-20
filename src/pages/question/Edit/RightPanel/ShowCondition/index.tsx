@@ -124,7 +124,7 @@ const ShowCondition: FC = () => {
         })
       );
     } catch {
-      // axios 拦截器已弹出 message.error，这里只需阻止本地状态更新
+      // axios 拦截器已弹出 message.error
     }
   };
 
@@ -309,13 +309,14 @@ const TargetValueInput: FC<TargetValueInputProps> = ({
   onChange,
   disabled,
 }) => {
-  // 单选题特殊处理：选项从组件 props 来
+  // 单选题特殊处理：选项从组件 props 来，支持多选
   if (triggerComponent?.props?.options) {
     return (
       <Select
+        mode="multiple"
         style={{ width: '100%' }}
-        placeholder="请选择目标值"
-        value={value as string}
+        placeholder="请选择目标值（可多选，满足任一即可）"
+        value={Array.isArray(value) ? value : value ? [value as string] : []}
         onChange={val => onChange(val)}
         options={triggerComponent.props.options.map((opt: any) => ({
           label: opt.text,
