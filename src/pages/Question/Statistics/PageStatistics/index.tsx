@@ -178,7 +178,9 @@ function renderCellValue(value: unknown, type: string, props: Record<string, any
     return (
       <span>
         {values.map((url, i) => {
+          console.log('图片url', url);
           const fullUrl = url.startsWith('http') ? url : `${API_HOST}${url}`;
+          console.log('图片fullurl', fullUrl);
           return (
             <ImageLink key={i} href={fullUrl} target="_blank" rel="noreferrer">
               图片{i + 1}

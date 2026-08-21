@@ -38,6 +38,7 @@ const StatisticsHeader: FC = () => {
 
     // 拼接 url
     const url = `${CLIENT_HOST}#/question/${id}`;
+    console.log('复制url', url);
 
     // 定义二维码组件
     const QRCodeElem = (
