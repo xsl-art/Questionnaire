@@ -21,6 +21,23 @@ import { updateVisibleConditionService } from '@/api';
 
 const { Text } = Typography;
 
+// 组件类型中文映射
+const componentTypeLabelMap: Record<string, string> = {
+  questionInput: '输入框',
+  questionTextarea: '文本域',
+  questionRadio: '单选',
+  questionCheckbox: '多选',
+  questionTitle: '标题',
+  questionParagraph: '段落',
+  questionInfo: '信息',
+  questionImage: '图片展示',
+  questionImageUpload: '图片上传',
+};
+
+const getComponentTypeLabel = (type: string): string => {
+  return componentTypeLabelMap[type] || type;
+};
+
 // 初始化空条件组
 const createEmptyGroup = (): ConditionGroup => ({
   id: nanoid(),
@@ -224,11 +241,41 @@ const RuleItem: FC<RuleItemProps> = ({ rule, index, triggerOptions, onChange, on
               // 切换组件时，重置字段和运算符
               onChange({ sourceId, sourceField: '', operator: 'eq', targetValue: '' });
             }}
-            options={triggerOptions.map(item => ({
-              label: `${item.title} (${item.type})`,
-              value: item.fe_id,
-            }))}
+            options={triggerOptions.map((item, idx) => {
+              // 获取组件内容预览（标题、选项文本等）
+              const props = item.props || {};
+              let contentPreview = '';
+
+              if (props.title) {
+                contentPreview = props.title;
+              } else if (props.text) {
+                contentPreview = props.text;
+              } else if (props.options?.length > 0) {
+                contentPreview = props.options.map((opt: any) => opt.text).join(', ');
+              } else if (props.list?.length > 0) {
+                contentPreview = props.list.map((opt: any) => opt.text).join(', ');
+              }
+
+              // 截断过长的预览文本
+              if (contentPreview.length > 20) {
+                contentPreview = contentPreview.slice(0, 20) + '...';
+              }
+
+              // 构建语义化标签
+              const typeLabel = getComponentTypeLabel(item.type);
+              const previewText = contentPreview ? ` - ${contentPreview}` : '';
+
+              return {
+                label: `${idx + 1}. ${typeLabel}${previewText}`,
+                value: item.fe_id,
+              };
+            })}
             allowClear
+            showSearch
+            filterOption={(input, option) => {
+              const label = String(option?.label || '').toLowerCase();
+              return label.includes(input.toLowerCase());
+            }}
           />
         </div>
 
