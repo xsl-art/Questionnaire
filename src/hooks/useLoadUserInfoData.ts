@@ -18,10 +18,12 @@ export const useLoadUserData = () => {
 
   const { username } = useUserInfo();
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
     if (username) {
       return;
     } else {
       run();
     }
-  }, [username]);
+  }, [username, run]);
 };

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createHashRouter } from 'react-router-dom';
 
 import Home from '../pages/Home/index';
 import Login from '../pages/Login/index';
@@ -15,7 +15,7 @@ import { lazy } from 'react';
 const Edit = lazy(() => import('../pages/Question/Edit/index'));
 const Statistics = lazy(() => import('../pages/Question/Statistics/index'));
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <MainLayout />,
