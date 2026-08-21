@@ -5,6 +5,7 @@ import { getStatisticsDetailService } from '@/api';
 import { useParams } from 'react-router-dom';
 import { getComponentConfigByType } from '@/components/QuestionComponents/type';
 import { useComponentInfo } from '@/hooks/useComponentInfo';
+import { type OptionType } from '@/components/QuestionComponents/QuestionCheckbox/types';
 
 const { Title, Text } = Typography;
 
@@ -66,9 +67,8 @@ const ChartStatistics: FC<PropsType> = ({ selectedComponentId, selectedComponent
 
     const statProps = {
       stat,
-      options: (selectedComponent?.props as { options?: { value: string; text: string }[] })
-        .options,
-      list: (selectedComponent?.props as { list?: { value: string; text: string }[] }).list,
+      options: (selectedComponent?.props as { options?: OptionType[] }).options,
+      list: (selectedComponent?.props as { list?: OptionType[] }).list,
     };
 
     return <StatComponent {...statProps} />;
