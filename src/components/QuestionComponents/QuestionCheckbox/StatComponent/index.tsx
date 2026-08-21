@@ -58,12 +58,12 @@ const ChartComponent: FC<QuestionCheckboxStatisticsProps> = ({ stat, list }) => 
           />
           <YAxis allowDecimals={false} />
           <Tooltip
-            formatter={(value: number, name: string) => [value, name]}
-            labelFormatter={(label: string) => `选项：${label}`}
+            formatter={(value, name) => [value ?? 0, name]}
+            labelFormatter={label => `选项：${label}`}
           />
           <Bar dataKey="count" radius={[4, 4, 0, 0]}>
             <LabelList dataKey="count" position="top" />
-            {chartData.map((entry, index) => (
+            {chartData.map((_entry, index) => (
               <Cell key={`cell-${index}`} fill={STAT_COLORS[index % STAT_COLORS.length]} />
             ))}
           </Bar>
