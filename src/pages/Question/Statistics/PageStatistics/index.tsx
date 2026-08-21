@@ -1,5 +1,5 @@
 import { useState, type FC } from 'react';
-import { PageStatisticsWrapper } from './style';
+import { PageStatisticsWrapper, ImageLink } from './style';
 import { useRequest } from 'ahooks';
 import { getStatisticsService } from '@/api';
 import { useParams } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { Pagination, Spin, Table, Tag, Typography, Tooltip } from 'antd';
 import { useComponentInfo } from '@/hooks/useComponentInfo';
 
 const { Title } = Typography;
+
+const API_HOST = import.meta.env.VITE_API_HOST || 'http://localhost:3005';
 
 // 会在答卷数据中出现、需要在统计表格里展示的组件类型
 const ANSWER_COMPONENT_TYPES = [
@@ -175,23 +177,16 @@ function renderCellValue(value: unknown, type: string, props: Record<string, any
     }
     return (
       <span>
-        {values.map((v, i) => (
-          <a
-            key={i}
-            href={v}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'inline-block', marginBottom: 4, marginRight: 8 }}
-          >
-            图片{i + 1}
-          </a>
-        ))}
+        {values.map((url, i) => {
+          const fullUrl = url.startsWith('http') ? url : `${API_HOST}${url}`;
+          return (
+            <ImageLink key={i} href={fullUrl} target="_blank" rel="noreferrer">
+              图片{i + 1}
+            </ImageLink>
+          );
+        })}
       </span>
     );
-  }
-
-  if (type === 'questionRadio') {
-    return <span>{getOptionText(String(value), props.options)}</span>;
   }
 
   return <span>{String(value)}</span>;
