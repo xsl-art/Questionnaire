@@ -16,6 +16,9 @@ import { usePageInfo } from '@/hooks/usePageInfo';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const { Title } = Typography;
+
+const CLIENT_HOST = import.meta.env.VITE_CLIENT_HOST || 'http://localhost:3000';
+
 const StatisticsHeader: FC = () => {
   const { title, isPublished } = usePageInfo();
   const { id } = useParams();
@@ -34,7 +37,7 @@ const StatisticsHeader: FC = () => {
     if (!isPublished) return null;
 
     // 拼接 url
-    const url = `http://localhost:3000/question/${id}`;
+    const url = `${CLIENT_HOST}/question/${id}`;
 
     // 定义二维码组件
     const QRCodeElem = (

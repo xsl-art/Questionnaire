@@ -1,5 +1,7 @@
 import httpInstance, { type ResDataType } from '../service/index';
 
+const API_HOST = import.meta.env.VITE_API_HOST || 'http://localhost:3005';
+
 export type UploadImageResult = {
   url: string;
 };
@@ -80,7 +82,7 @@ export const uploadImageService = async (
   const data = (await httpInstance.post('/api/upload/image', formData)) as ResDataType;
   let url = data.url as string;
   if (url && url.startsWith('/')) {
-    url = `http://localhost:3005${url}`;
+    url = `${API_HOST}${url}`;
   }
   return { url };
 };

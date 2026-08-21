@@ -10,8 +10,10 @@ export type ResDataType = {
   [key: string]: any;
 };
 
+const API_HOST = import.meta.env.VITE_API_HOST || 'http://localhost:3005';
+
 const httpInstance = axios.create({
-  baseURL: 'http://localhost:3005',
+  baseURL: API_HOST,
   timeout: 5000,
 });
 
