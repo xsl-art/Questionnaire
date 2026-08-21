@@ -14,24 +14,12 @@ export const StatWrapper = styled.div`
   .content {
     margin: 0 24px;
     display: flex;
-
-    .left {
-      width: 350px;
-      margin-right: 24px;
-    }
+    flex-direction: column;
 
     .main {
       flex: auto;
       background-color: #fff;
       padding: 12px 18px;
-    }
-
-    .right {
-      width: 400px;
-      margin-left: 24px;
-      background-color: #fff;
-      padding: 12px 18px;
-      overflow: hidden;
     }
   }
 `;

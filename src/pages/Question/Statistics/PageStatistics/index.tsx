@@ -13,6 +13,7 @@ const ANSWER_COMPONENT_TYPES = [
   'questionInput',
   'questionTextarea',
   'questionCheckbox',
+  'questionRadio',
   'questionImageUpload',
 ];
 
@@ -20,10 +21,12 @@ type PropsType = {
   selectedComponentId: string;
   setSelectedComponentId: (id: string) => void;
   setSelectedComponentType: (type: string) => void;
+  onColumnClick?: () => void;
 };
 
 const PageStatistics: FC<PropsType> = (props: PropsType) => {
-  const { selectedComponentId, setSelectedComponentId, setSelectedComponentType } = props;
+  const { selectedComponentId, setSelectedComponentId, setSelectedComponentType, onColumnClick } =
+    props;
   const { id = '' } = useParams();
   const [total, setTotal] = useState(0);
   const [list, setList] = useState([]);
@@ -80,6 +83,7 @@ const PageStatistics: FC<PropsType> = (props: PropsType) => {
               onClick={() => {
                 setSelectedComponentId(fe_id);
                 setSelectedComponentType(type);
+                onColumnClick?.();
               }}
             >
               <span style={{ color: fe_id === selectedComponentId ? '#1890ff' : 'inherit' }}>
@@ -169,7 +173,25 @@ function renderCellValue(value: unknown, type: string, props: Record<string, any
     if (values.length === 0) {
       return <span style={{ color: '#bfbfbf' }}>-</span>;
     }
-    return <span>已上传 {values.length} 张</span>;
+    return (
+      <span>
+        {values.map((v, i) => (
+          <a
+            key={i}
+            href={v}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'inline-block', marginBottom: 4, marginRight: 8 }}
+          >
+            图片{i + 1}
+          </a>
+        ))}
+      </span>
+    );
+  }
+
+  if (type === 'questionRadio') {
+    return <span>{getOptionText(String(value), props.options)}</span>;
   }
 
   return <span>{String(value)}</span>;
