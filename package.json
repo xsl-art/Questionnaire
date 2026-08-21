@@ -23,6 +23,7 @@
     "antd": "^6.5.2",
     "axios": "^1.19.0",
     "classnames": "^2.5.1",
+    "intersection-observer": "0.12.2",
     "lodash.clonedeep": "^4.5.0",
     "low-code": "link:",
     "monaco-editor": "^0.56.0",

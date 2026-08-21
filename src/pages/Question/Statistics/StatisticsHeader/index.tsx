@@ -11,7 +11,9 @@ import {
   Typography,
   type InputRef,
 } from 'antd';
-import { CopyOutlined, LeftOutlined, QrcodeOutlined } from '@ant-design/icons';
+import CopyOutlined from '@ant-design/icons';
+import LeftOutlined from '@ant-design/icons';
+import QrcodeOutlined from '@ant-design/icons';
 import { usePageInfo } from '@/hooks/usePageInfo';
 import { useNavigate, useParams } from 'react-router-dom';
 
